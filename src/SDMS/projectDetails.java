@@ -5,6 +5,7 @@
  */
 package SDMS;
 
+import java.awt.HeadlessException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -150,11 +151,11 @@ public class projectDetails extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Adno", "Student Name", "Project Name", "Year", "Approved"
+                "Adno", "Student Name", "Project Name", "Approved", "Year"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Integer.class, java.lang.String.class
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Integer.class
             };
             boolean[] canEdit = new boolean [] {
                 false, false, false, false, false
@@ -176,8 +177,8 @@ public class projectDetails extends javax.swing.JFrame {
             projectListT.getColumnModel().getColumn(1).setResizable(false);
             projectListT.getColumnModel().getColumn(2).setResizable(false);
             projectListT.getColumnModel().getColumn(3).setResizable(false);
-            projectListT.getColumnModel().getColumn(3).setPreferredWidth(5);
             projectListT.getColumnModel().getColumn(4).setResizable(false);
+            projectListT.getColumnModel().getColumn(4).setPreferredWidth(5);
         }
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
@@ -212,6 +213,7 @@ public class projectDetails extends javax.swing.JFrame {
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void approveBMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_approveBMouseClicked
@@ -250,23 +252,18 @@ public class projectDetails extends javax.swing.JFrame {
                     break;
                 }
             }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(projectDetails.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(projectDetails.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(projectDetails.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(projectDetails.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
         //</editor-fold>
 
+        //</editor-fold>
+        //</editor-fold>
+
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new projectDetails().setVisible(true);
-            }
+        java.awt.EventQueue.invokeLater(() -> {
+            new projectDetails().setVisible(true);
         });
     }
 
@@ -282,7 +279,7 @@ public class projectDetails extends javax.swing.JFrame {
                 projectList.addRow(new Object[]{rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5)});
             }
             con.close();
-        } catch (Exception e) {
+        } catch (SQLException e) {
             JOptionPane.showMessageDialog(this, e);
         }
     }
@@ -293,15 +290,14 @@ public class projectDetails extends javax.swing.JFrame {
         } else {
 
             try {
-                String sql = null;
-                Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/StudentDetails?useLegacyDatetimeCode=false&serverTimezone=UTC", "root", "");
-                sql = "update project set approved = 'Yes' where adno=?";
+                Connection con = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD);
+                String sql = "update project set approved = 'Yes' where adno=?";
                 PreparedStatement pst = con.prepareStatement(sql);
                 pst.setString(1, String.valueOf(adnoCB.getSelectedItem()));
                 pst.executeUpdate();
                 JOptionPane.showMessageDialog(this, "Update Success");
                 con.close();
-            } catch (Exception e) {
+            } catch (HeadlessException | SQLException e) {
                 JOptionPane.showMessageDialog(this, e);
             }
         }
@@ -330,15 +326,14 @@ public class projectDetails extends javax.swing.JFrame {
         } else {
 
             try {
-                String sql = null;
                 Connection con = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD);
-                sql = "update project set approved = 'RJT' where adno=?";
+                String sql = "update project set approved = 'RJT' where adno=?";
                 PreparedStatement pst = con.prepareStatement(sql);
                 pst.setString(1, String.valueOf(adnoCB.getSelectedItem()));
                 pst.executeUpdate();
                 JOptionPane.showMessageDialog(this, "Update Success");
                 con.close();
-            } catch (Exception e) {
+            } catch (HeadlessException | SQLException e) {
                 JOptionPane.showMessageDialog(this, e);
             }
         }

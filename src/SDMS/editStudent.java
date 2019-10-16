@@ -278,6 +278,7 @@ public class editStudent extends javax.swing.JFrame {
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void nameTFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nameTFActionPerformed
@@ -339,23 +340,18 @@ public class editStudent extends javax.swing.JFrame {
                     break;
                 }
             }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(editStudent.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(editStudent.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(editStudent.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(editStudent.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
         //</editor-fold>
 
+        //</editor-fold>
+        //</editor-fold>
+
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new editStudent().setVisible(true);
-            }
+        java.awt.EventQueue.invokeLater(() -> {
+            new editStudent().setVisible(true);
         });
     }
 
@@ -397,6 +393,7 @@ public class editStudent extends javax.swing.JFrame {
             pst.setString(1, (String) adno);
             pst.executeUpdate();
             sql = "delete from user where username=?";
+            pst = con.prepareStatement(sql);
             pst.setString(1, username);
             pst.executeUpdate();
             con.close();
@@ -441,7 +438,7 @@ public class editStudent extends javax.swing.JFrame {
                 phoneTF.setText(rs.getString(9));
             }
             con.close();
-        } catch (Exception e) {
+        } catch (SQLException e) {
             JOptionPane.showMessageDialog(this, e);
         }
     }
@@ -495,7 +492,7 @@ public class editStudent extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(this, "* field must have value");
             } else if (!(adno.matches("[0-9]+"))) {
 
-            } else if (!(name.matches("[A-Z]+[a-z]+")) && name.length() < 3) {
+            } else if (!(name.matches("[A-Z]+[a-z]+[ ]+")) && name.length() < 3) {
 
             } else if (Integer.valueOf(rno) <= 0 && !(rno.matches("[[0-9]+"))) {
 

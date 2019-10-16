@@ -7,6 +7,8 @@ package SDMS;
 
 import java.awt.HeadlessException;
 import java.sql.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 /**
@@ -314,6 +316,7 @@ public class addStudent extends javax.swing.JFrame {
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void nameTFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nameTFActionPerformed
@@ -372,13 +375,7 @@ public class addStudent extends javax.swing.JFrame {
                     break;
                 }
             }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(addStudent.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(addStudent.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(addStudent.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(addStudent.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
@@ -386,11 +383,14 @@ public class addStudent extends javax.swing.JFrame {
         //</editor-fold>
         //</editor-fold>
 
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new addStudent().setVisible(true);
-            }
+        java.awt.EventQueue.invokeLater(() -> {
+            new addStudent().setVisible(true);
         });
     }
 
@@ -409,7 +409,7 @@ public class addStudent extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(this, "* field must have value");
             } else if (!(adno.matches("[0-9]+"))) {
                 errorADNO.setText("Invalid");
-            } else if (!(name.matches("[A-Z]+[a-z]+")) || name.length() < 3) {
+            } else if (name.contains("[1-9]+[!,@,#,$,%,^,&,*]") || name.length() < 3) {
                 errorNAME.setText("Invalid");
             } else if (!(rnoTF.getText().matches("[0-9]+")) || (!(rnoTF.getText().matches("[0-9]+")) && Integer.valueOf(rnoTF.getText()) <= 0)) {
                 errorRNO.setText("Invalid");
@@ -465,7 +465,6 @@ public class addStudent extends javax.swing.JFrame {
         } catch (HeadlessException | NumberFormatException e) {
             JOptionPane.showMessageDialog(this, e);
         }
-
     }
 
     private void clearfield() {

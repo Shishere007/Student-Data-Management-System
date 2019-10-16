@@ -5,6 +5,7 @@
  */
 package SDMS;
 
+import java.awt.HeadlessException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -639,6 +640,7 @@ public class studentHome extends javax.swing.JFrame {
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void exitBMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_exitBMouseClicked
@@ -736,13 +738,7 @@ public class studentHome extends javax.swing.JFrame {
                     break;
                 }
             }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(studentHome.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(studentHome.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(studentHome.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(studentHome.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
@@ -754,11 +750,18 @@ public class studentHome extends javax.swing.JFrame {
         //</editor-fold>
         //</editor-fold>
 
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new studentHome().setVisible(true);
-            }
+        java.awt.EventQueue.invokeLater(() -> {
+            new studentHome().setVisible(true);
         });
     }
 
@@ -794,7 +797,7 @@ public class studentHome extends javax.swing.JFrame {
                 phoneTF.setText(rs.getString(9));
             }
             con.close();
-        } catch (Exception e) {
+        } catch (SQLException e) {
             JOptionPane.showMessageDialog(this, e);
         }
     }
@@ -860,22 +863,22 @@ public class studentHome extends javax.swing.JFrame {
         approveP.setVisible(true);
         try {
             Connection con = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD);
-            String sql = "select * from project where adno=?";
+            String sql = "select approved,pname from project where adno=?";
             PreparedStatement pst = con.prepareStatement(sql);
             pst.setString(1, username);
             ResultSet rs = pst.executeQuery();
             if (rs.next()) {
-                projectNameTF.setText(rs.getString(3));
+                projectNameTF.setText(rs.getString(2));
                 projectWarningL.setVisible(false);
-                if (rs.getString(5).equals("yes") || rs.getString(5).equals("Yes")) {
+                if (rs.getString(1).equals("yes") || rs.getString(1).equals("Yes")) {
                     approveCB.setSelected(true);
                     updateB.setVisible(false);
                     approveCB.setEnabled(false);
                     projectNameTF.setEditable(false);
-                } else if (rs.getString(5).equals("yes") || rs.getString(5).equals("RJT")) {
+                } else if (rs.getString(1).equals("yes") || rs.getString(1).equals("RJT")) {
                     projectRejectedL.setVisible(true);
                     approveP.setVisible(false);
-                } else if (rs.getString(3).equals("")) {
+                } else if (rs.getString(1).equals("")) {
                     projectWarningL.setVisible(true);
                     approveP.setVisible(false);
                 } else {
@@ -885,7 +888,7 @@ public class studentHome extends javax.swing.JFrame {
                 approveP.setVisible(false);
             }
             con.close();
-        } catch (Exception e) {
+        } catch (SQLException e) {
             JOptionPane.showMessageDialog(this, e);
         }
     }
@@ -900,15 +903,15 @@ public class studentHome extends javax.swing.JFrame {
             PreparedStatement pst = con.prepareStatement(sql);
             ResultSet rs = pst.executeQuery();
             while (rs.next()) {
-                if (Integer.valueOf(rs.getString(4)).equals(2019)) {
-                    projectList.addRow(new Object[]{rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(5)});
+                if (Integer.valueOf(rs.getString(5)).equals(2019)) {
+                    projectList.addRow(new Object[]{rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4)});
 
                 } else {
                     prevProject.addRow(new Object[]{rs.getString(1), rs.getString(2), rs.getString(3)});
                 }
             }
             con.close();
-        } catch (Exception e) {
+        } catch (NumberFormatException | SQLException e) {
             JOptionPane.showMessageDialog(this, e);
         }
     }
@@ -934,7 +937,7 @@ public class studentHome extends javax.swing.JFrame {
             pst.executeUpdate();
             con.close();
             JOptionPane.showMessageDialog(this, "Successful");
-        } catch (Exception e) {
+        } catch (HeadlessException | SQLException e) {
             JOptionPane.showMessageDialog(this, e);
         }
         projectListUpdate();

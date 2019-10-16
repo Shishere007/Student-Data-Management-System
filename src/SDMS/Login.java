@@ -7,15 +7,11 @@ package SDMS;
 
 import java.awt.HeadlessException;
 import java.awt.event.KeyEvent;
-import java.beans.Statement;
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 /**
@@ -40,17 +36,18 @@ public class Login extends javax.swing.JFrame {
             + "dob date,\n"
             + "email varchar(25),\n"
             + "phone varchar(10))";
-    public static final String Create_Table_Project = "create table project ( adno int(6) primary key,\n"
+    public static final String Create_Table_Project = "create table project( adno int(6) primary key,\n"
+            + "sname varchar2(10) not null,\n"
             + "pname varchar2(20) not null,\n"
-            + "year int(4) not null,\n"
-            + "approval varchar(3) default 'no')";
+            + "approved varchar(3) default 'no',\n"
+            + "year int(4) not null default '2019')";
     public static final String Create_Table_Course = "create table course(dept varchar(4) primary key,\n"
             + "deptName varchar2(30) not null)";
 
     public Login() {
+        //dropTables();
         createTables();
         //emptyTables();
-        //dropTables();
         updateBasicTableData();
         initComponents();
     }
@@ -59,18 +56,17 @@ public class Login extends javax.swing.JFrame {
         try {
             Class.forName(JDBC_DRIVER);
             connection = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD);
-            PreparedStatement pst = connection.prepareStatement(Create_Table_Course);
-            pst.execute();
-            pst = connection.prepareStatement(Create_Table_User);
+            PreparedStatement pst = connection.prepareStatement(Create_Table_User);
             pst.execute();
             pst = connection.prepareStatement(Create_Table_Student);
             pst.execute();
-
             pst = connection.prepareStatement(Create_Table_Project);
+            pst.execute();
+            pst = connection.prepareStatement(Create_Table_Course);
             pst.execute();
 
         } catch (HeadlessException | ClassNotFoundException | SQLException e) {
-            //JOptionPane.showInputDialog("Done");
+            //JOptionPane.showMessageDialog(this, e);
         }
     }
 
@@ -106,6 +102,7 @@ public class Login extends javax.swing.JFrame {
             pst = connection.prepareStatement(adminData);
             pst.execute();
         } catch (SQLException e) {
+            //JOptionPane.showMessageDialog(this, e);
         }
     }
 
@@ -124,26 +121,29 @@ public class Login extends javax.swing.JFrame {
             deptSql = "delete from course";
             pst = connection.prepareStatement(deptSql);
             pst.execute();
-        } catch (SQLException ex) {
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this, e);
         }
     }
 
     private void dropTables() {
         try {
             connection = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD);
-            String deptSql = "drop table user";
+            String deptSql = "drop table if exists user";
             PreparedStatement pst = connection.prepareStatement(deptSql);
             pst.execute();
-            deptSql = "drop table student";
+            deptSql = "drop table if exists student";
             pst = connection.prepareStatement(deptSql);
             pst.execute();
-            deptSql = "drop table project";
+            deptSql = "drop table if exists project";
             pst = connection.prepareStatement(deptSql);
             pst.execute();
-            deptSql = "drop table course";
+            deptSql = "drop table if exists course";
             pst = connection.prepareStatement(deptSql);
             pst.execute();
-        } catch (SQLException ex) {
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this, e);
+
         }
     }
 
@@ -379,6 +379,7 @@ public class Login extends javax.swing.JFrame {
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void clearBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clearBActionPerformed
@@ -443,23 +444,18 @@ public class Login extends javax.swing.JFrame {
                     break;
                 }
             }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Login.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Login.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Login.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(Login.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
         //</editor-fold>
 
+        //</editor-fold>
+        //</editor-fold>
+
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new Login().setVisible(true);
-            }
+        java.awt.EventQueue.invokeLater(() -> {
+            new Login().setVisible(true);
         });
     }
 
@@ -498,7 +494,7 @@ public class Login extends javax.swing.JFrame {
                     JOptionPane.showMessageDialog(this, "Incorrect Username", "Error", JOptionPane.OK_OPTION);
                 }
                 con.close();
-            } catch (Exception e) {
+            } catch (HeadlessException | SQLException e) {
                 JOptionPane.showMessageDialog(this, e);
             }
 
