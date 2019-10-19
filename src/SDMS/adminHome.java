@@ -5,15 +5,13 @@
  */
 package SDMS;
 
-import java.sql.*;
 import javax.swing.JOptionPane;
-import javax.swing.table.DefaultTableModel;
 
 /**
  *
  * @author Suhaib K
  */
-public class adminHome extends javax.swing.JFrame {
+public final class adminHome extends javax.swing.JFrame {
 
     public static final String JDBC_DRIVER = "org.h2.Driver";
     public static final String DB_URL = "jdbc:h2:~/SDMS";
@@ -22,7 +20,6 @@ public class adminHome extends javax.swing.JFrame {
 
     public adminHome() {
         initComponents();
-        tableDataUpdate();
     }
 
     /**
@@ -40,14 +37,11 @@ public class adminHome extends javax.swing.JFrame {
         exitB = new javax.swing.JButton();
         loginPageB = new javax.swing.JButton();
         changePasswordB = new javax.swing.JButton();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        dataT = new javax.swing.JTable();
-        newStudentB = new javax.swing.JButton();
-        editStudentB = new javax.swing.JButton();
-        studentProjectB = new javax.swing.JButton();
-        refreshB = new javax.swing.JButton();
+        jLabel4 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("editStudentF");
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         setResizable(false);
 
@@ -151,81 +145,18 @@ public class adminHome extends javax.swing.JFrame {
                 .addGap(0, 0, Short.MAX_VALUE))
         );
 
-        dataT.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-
-            },
-            new String [] {
-                "AdNo", "RNo", "Name", "Gender", "Dept", "Sem", "DOB", "Email", "Phone"
-            }
-        ) {
-            Class[] types = new Class [] {
-                java.lang.String.class, java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
-            };
-            boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false, false, false
-            };
-
-            public Class getColumnClass(int columnIndex) {
-                return types [columnIndex];
-            }
-
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
-            }
-        });
-        jScrollPane1.setViewportView(dataT);
-        if (dataT.getColumnModel().getColumnCount() > 0) {
-            dataT.getColumnModel().getColumn(0).setPreferredWidth(20);
-            dataT.getColumnModel().getColumn(1).setPreferredWidth(5);
-            dataT.getColumnModel().getColumn(2).setPreferredWidth(40);
-            dataT.getColumnModel().getColumn(3).setPreferredWidth(20);
-            dataT.getColumnModel().getColumn(4).setPreferredWidth(25);
-            dataT.getColumnModel().getColumn(5).setPreferredWidth(5);
-            dataT.getColumnModel().getColumn(6).setPreferredWidth(35);
-            dataT.getColumnModel().getColumn(7).setPreferredWidth(100);
-        }
-
-        newStudentB.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        newStudentB.setText("New Student");
-        newStudentB.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        newStudentB.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                newStudentBActionPerformed(evt);
-            }
-        });
-
-        editStudentB.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        editStudentB.setText("Edit Student");
-        editStudentB.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        editStudentB.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                editStudentBActionPerformed(evt);
-            }
-        });
-
-        studentProjectB.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        studentProjectB.setText("Student Project");
-        studentProjectB.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        studentProjectB.addMouseListener(new java.awt.event.MouseAdapter() {
+        jLabel4.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabel4.setText("► Student Details");
+        jLabel4.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jLabel4.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                studentProjectBMouseClicked(evt);
-            }
-        });
-        studentProjectB.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                studentProjectBActionPerformed(evt);
+                jLabel4MouseClicked(evt);
             }
         });
 
-        refreshB.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        refreshB.setText("Refresh");
-        refreshB.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        refreshB.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                refreshBActionPerformed(evt);
-            }
-        });
+        jLabel5.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabel5.setText("► Project Details");
+        jLabel5.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -233,30 +164,24 @@ public class adminHome extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(newStudentB, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(editStudentB, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(studentProjectB)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(refreshB)))
-                .addContainerGap())
+                        .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 21, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(newStudentB, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(editStudentB, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(studentProjectB, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(refreshB))
+                .addGap(34, 34, 34)
+                .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 359, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(312, Short.MAX_VALUE))
         );
 
         pack();
@@ -274,18 +199,6 @@ public class adminHome extends javax.swing.JFrame {
     private void exitBKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_exitBKeyPressed
         exitprogram();
     }//GEN-LAST:event_exitBKeyPressed
-
-    private void newStudentBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newStudentBActionPerformed
-        addStudent add = new addStudent();
-        add.setVisible(true);
-        tableDataUpdate();
-    }//GEN-LAST:event_newStudentBActionPerformed
-
-    private void editStudentBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editStudentBActionPerformed
-        editStudent newpage = new editStudent();
-        newpage.setVisible(true);
-        tableDataUpdate();
-    }//GEN-LAST:event_editStudentBActionPerformed
 
     private void loginPageBMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_loginPageBMouseClicked
         // TODO add your handling code here:
@@ -314,18 +227,11 @@ public class adminHome extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_changePasswordBKeyPressed
 
-    private void studentProjectBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_studentProjectBActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_studentProjectBActionPerformed
-
-    private void studentProjectBMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_studentProjectBMouseClicked
-        projectDetails pd = new projectDetails();
-        pd.setVisible(true);
-    }//GEN-LAST:event_studentProjectBMouseClicked
-
-    private void refreshBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_refreshBActionPerformed
-        tableDataUpdate();
-    }//GEN-LAST:event_refreshBActionPerformed
+    private void jLabel4MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel4MouseClicked
+        studentData newpage = new studentData();
+        newpage.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_jLabel4MouseClicked
 
     /**
      * @param args the command line arguments
@@ -343,65 +249,43 @@ public class adminHome extends javax.swing.JFrame {
                     break;
                 }
             }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(adminHome.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(adminHome.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(adminHome.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(adminHome.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new adminHome().setVisible(true);
-            }
+        java.awt.EventQueue.invokeLater(() -> {
+            new adminHome().setVisible(true);
         });
     }
 
-    public void tableDataUpdate() {
-        DefaultTableModel model = (DefaultTableModel) dataT.getModel();
-        model.setRowCount(0);
-        try {
-            Connection con = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD);
-            String sql = "select * from student order by adno";
-            PreparedStatement pst = con.prepareStatement(sql);
-            ResultSet rs = pst.executeQuery();
-            while (rs.next()) {
-                model.addRow(new Object[]{rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4),
-                    rs.getString(5), rs.getString(6), rs.getString(7), rs.getString(8), rs.getString(9)});
-            }
-            con.close();
-        } catch (SQLException e) {
-            JOptionPane.showMessageDialog(this, e);
-        }
-
-    }
-
     private void exitprogram() {
-        int YesNo;
-        YesNo = JOptionPane.showConfirmDialog(this, "Are you sure?", "Exit Program", JOptionPane.YES_NO_OPTION);
-        if (YesNo == 0) {
+        if (JOptionPane.showConfirmDialog(this, "Are you sure?", "Exit Program", JOptionPane.YES_NO_OPTION) == 0) {
             System.exit(0);
         }
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton changePasswordB;
-    private javax.swing.JTable dataT;
-    private javax.swing.JButton editStudentB;
     private javax.swing.JButton exitB;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JButton loginPageB;
-    private javax.swing.JButton newStudentB;
-    private javax.swing.JButton refreshB;
-    private javax.swing.JButton studentProjectB;
     // End of variables declaration//GEN-END:variables
 }

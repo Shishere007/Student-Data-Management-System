@@ -43,9 +43,21 @@ public class Login extends javax.swing.JFrame {
             + "year int(4) not null default '2019')";
     public static final String Create_Table_Course = "create table course(dept varchar(4) primary key,\n"
             + "deptName varchar2(30) not null)";
+    public static final String Create_Table_Mark = "create table mark (adno int(6) not null,\n"
+            + "sem int(1) not null,\n"
+            + "sub1 int default '0',\n"
+            + "sub2 int default '0',\n"
+            + "sub3 int default '0',\n"
+            + "sub4 int default '0',\n"
+            + "sub5 int default '0',\n"
+            + "sub6 int default '0',\n"
+            + "lab1 int default '0',\n"
+            + "lab2 int default '0',\n"
+            + "cgpa float default '0',\n"
+            + "primary key (adno,sem));";
 
     public Login() {
-        //dropTables();
+        dropTables();
         createTables();
         //emptyTables();
         updateBasicTableData();
@@ -64,9 +76,11 @@ public class Login extends javax.swing.JFrame {
             pst.execute();
             pst = connection.prepareStatement(Create_Table_Course);
             pst.execute();
-
+            pst = connection.prepareStatement(Create_Table_Mark);
+            pst.execute();
+            connection.close();
         } catch (HeadlessException | ClassNotFoundException | SQLException e) {
-            //JOptionPane.showMessageDialog(this, e);
+            JOptionPane.showMessageDialog(this, e);
         }
     }
 
@@ -101,6 +115,7 @@ public class Login extends javax.swing.JFrame {
                     + "'" + "pass" + "')";
             pst = connection.prepareStatement(adminData);
             pst.execute();
+            connection.close();
         } catch (SQLException e) {
             //JOptionPane.showMessageDialog(this, e);
         }
@@ -121,6 +136,7 @@ public class Login extends javax.swing.JFrame {
             deptSql = "delete from course";
             pst = connection.prepareStatement(deptSql);
             pst.execute();
+            connection.close();
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(this, e);
         }
@@ -141,6 +157,10 @@ public class Login extends javax.swing.JFrame {
             deptSql = "drop table if exists course";
             pst = connection.prepareStatement(deptSql);
             pst.execute();
+            deptSql = "drop table if exists mark";
+            pst = connection.prepareStatement(deptSql);
+            pst.execute();
+            connection.close();
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(this, e);
 
@@ -176,6 +196,7 @@ public class Login extends javax.swing.JFrame {
         jLabel4.setText("jLabel4");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setName("loginF"); // NOI18N
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 30)); // NOI18N
         jLabel1.setText("Student Data Management System");

@@ -19,12 +19,25 @@ public class editStudent extends javax.swing.JFrame {
     public static final String DB_URL = "jdbc:h2:~/SDMS";
     public static final String DB_USERNAME = "root";
     public static final String DB_PASSWORD = "";
+    String adno;
 
     public editStudent() {
         initComponents();
-        insertAdno();
+        adno = "344";
+        adnoTF.setText(adno);
+        adnoTF.setEditable(false);
         insertDept();
+        insertData();
 
+    }
+
+    public editStudent(String number) {
+        initComponents();
+        adno = number;
+        adnoTF.setText(adno);
+        adnoTF.setEditable(false);
+        insertDept();
+        insertData();
     }
 
     /**
@@ -55,12 +68,10 @@ public class editStudent extends javax.swing.JFrame {
         maleRB = new javax.swing.JRadioButton();
         femaleRB = new javax.swing.JRadioButton();
         deptCB = new javax.swing.JComboBox<>();
-        adnoCB = new javax.swing.JComboBox<>();
         updateB = new javax.swing.JButton();
         cancelB = new javax.swing.JButton();
         deleteB = new javax.swing.JButton();
-        searchB = new javax.swing.JButton();
-        refreshB = new javax.swing.JButton();
+        adnoTF = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
@@ -118,19 +129,8 @@ public class editStudent extends javax.swing.JFrame {
         femaleRB.setText("Female");
         femaleRB.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
 
+        deptCB.setToolTipText("");
         deptCB.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-
-        adnoCB.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        adnoCB.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                adnoCBMouseClicked(evt);
-            }
-        });
-        adnoCB.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                adnoCBActionPerformed(evt);
-            }
-        });
 
         updateB.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         updateB.setText("Update");
@@ -159,20 +159,9 @@ public class editStudent extends javax.swing.JFrame {
             }
         });
 
-        searchB.setText("S");
-        searchB.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        searchB.addActionListener(new java.awt.event.ActionListener() {
+        adnoTF.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                searchBActionPerformed(evt);
-            }
-        });
-
-        refreshB.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        refreshB.setText("Refresh");
-        refreshB.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        refreshB.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                refreshBActionPerformed(evt);
+                adnoTFActionPerformed(evt);
             }
         });
 
@@ -191,36 +180,30 @@ public class editStudent extends javax.swing.JFrame {
                     .addComponent(jLabel2)
                     .addComponent(jLabel1)
                     .addComponent(jLabel4)
-                    .addComponent(jLabel5)
+                    .addComponent(jLabel5))
+                .addGap(70, 70, 70)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(deptCB, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(updateB, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(cancelB, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(12, 12, 12)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(deptCB, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(maleRB)
-                                .addGap(18, 18, 18)
-                                .addComponent(femaleRB))
-                            .addComponent(nameTF)
-                            .addComponent(rnoTF)
-                            .addComponent(dobTF)
-                            .addComponent(semTF)
-                            .addComponent(phoneTF)
-                            .addComponent(mailTF)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(adnoCB, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(searchB))))
-                    .addGroup(layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(deleteB, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(refreshB)))
+                        .addComponent(maleRB)
+                        .addGap(18, 18, 18)
+                        .addComponent(femaleRB))
+                    .addComponent(nameTF, javax.swing.GroupLayout.DEFAULT_SIZE, 165, Short.MAX_VALUE)
+                    .addComponent(rnoTF)
+                    .addComponent(dobTF)
+                    .addComponent(semTF)
+                    .addComponent(phoneTF)
+                    .addComponent(mailTF)
+                    .addComponent(adnoTF, javax.swing.GroupLayout.DEFAULT_SIZE, 165, Short.MAX_VALUE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(updateB, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(cancelB, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(deleteB, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(44, 44, 44))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -230,8 +213,7 @@ public class editStudent extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(adnoCB, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(searchB))
+                            .addComponent(adnoTF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -272,8 +254,7 @@ public class editStudent extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(updateB)
                     .addComponent(cancelB)
-                    .addComponent(deleteB)
-                    .addComponent(refreshB))
+                    .addComponent(deleteB))
                 .addContainerGap(36, Short.MAX_VALUE))
         );
 
@@ -305,24 +286,9 @@ public class editStudent extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_phoneTFActionPerformed
 
-    private void adnoCBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_adnoCBActionPerformed
-
-    }//GEN-LAST:event_adnoCBActionPerformed
-
-    private void adnoCBMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_adnoCBMouseClicked
-
-    }//GEN-LAST:event_adnoCBMouseClicked
-
-    private void searchBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchBActionPerformed
-        insertData();
-    }//GEN-LAST:event_searchBActionPerformed
-
-    private void refreshBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_refreshBActionPerformed
-        this.dispose();
-        editStudent newpage = new editStudent();
-        newpage.setVisible(true);
-
-    }//GEN-LAST:event_refreshBActionPerformed
+    private void adnoTFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_adnoTFActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_adnoTFActionPerformed
 
     /**
      * @param args the command line arguments
@@ -355,36 +321,7 @@ public class editStudent extends javax.swing.JFrame {
         });
     }
 
-    // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JComboBox<String> adnoCB;
-    private javax.swing.JButton cancelB;
-    private javax.swing.JButton deleteB;
-    private javax.swing.JComboBox<String> deptCB;
-    private javax.swing.JTextField dobTF;
-    private javax.swing.JRadioButton femaleRB;
-    private javax.swing.ButtonGroup genderRG;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
-    private javax.swing.JLabel jLabel9;
-    private javax.swing.JTextField mailTF;
-    private javax.swing.JRadioButton maleRB;
-    private javax.swing.JTextField nameTF;
-    private javax.swing.JTextField phoneTF;
-    private javax.swing.JButton refreshB;
-    private javax.swing.JTextField rnoTF;
-    private javax.swing.JButton searchB;
-    private javax.swing.JTextField semTF;
-    private javax.swing.JButton updateB;
-    // End of variables declaration//GEN-END:variables
-
     private void deleteData() {
-        var adno = adnoCB.getSelectedItem();
         String username = (String) adno;
         try {
             Connection con = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD);
@@ -396,6 +333,14 @@ public class editStudent extends javax.swing.JFrame {
             pst = con.prepareStatement(sql);
             pst.setString(1, username);
             pst.executeUpdate();
+            sql = "delete from user where adno=?";
+            pst = con.prepareStatement(sql);
+            pst.setString(1, adno);
+            pst.executeUpdate();
+            sql = "delete from project where adno=?";
+            pst = con.prepareStatement(sql);
+            pst.setString(1, adno);
+            pst.executeUpdate();
             con.close();
             JOptionPane.showMessageDialog(this, "Deletion Successful");
         } catch (SQLException e) {
@@ -405,10 +350,10 @@ public class editStudent extends javax.swing.JFrame {
     }
 
     private void confirm(int opt) {
-        if (adnoCB.getSelectedIndex() < 0) {
-            JOptionPane.showMessageDialog(this, "No Data selected!");
-        } else if (opt == 0 && JOptionPane.showConfirmDialog(this, "Delete this Student?", "", JOptionPane.YES_NO_OPTION) == 0) {
+
+        if (opt == 0 && JOptionPane.showConfirmDialog(this, "Delete this Student?", "", JOptionPane.YES_NO_OPTION) == 0) {
             deleteData();
+            this.dispose();
         } else if (opt == 1) {
             updateData();
         }
@@ -416,7 +361,6 @@ public class editStudent extends javax.swing.JFrame {
     }
 
     private void insertData() {
-        var adno = adnoCB.getSelectedItem();
         try {
             Connection con = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD);
             String sql = "select * from student where adno=?";
@@ -443,22 +387,6 @@ public class editStudent extends javax.swing.JFrame {
         }
     }
 
-    private void insertAdno() {
-        try {
-            Connection con = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD);
-            String sql = "select adno from student";
-            PreparedStatement pst = con.prepareStatement(sql);
-            ResultSet rs = pst.executeQuery();
-            while (rs.next()) {
-                adnoCB.addItem(rs.getString(1));
-            }
-            con.close();
-        } catch (SQLException e) {
-            JOptionPane.showInputDialog(this, e);
-        }
-        adnoCB.setSelectedIndex(-1);
-    }
-
     private int deptChoosen(String dept) {
         switch (dept) {
             case "CSE":
@@ -477,7 +405,6 @@ public class editStudent extends javax.swing.JFrame {
     }
 
     private void updateData() {
-        String adno = (String) adnoCB.getSelectedItem();
         String date = dobTF.getText();
         String phone = phoneTF.getText();
         String name = nameTF.getText();
@@ -487,7 +414,7 @@ public class editStudent extends javax.swing.JFrame {
         String username = adno;
         try {
 
-            if (adno.equals("") || name.equals("") || rno.equals("") || sem.equals("") || date.equals("")) //add date null condition
+            if (name.equals("") || rno.equals("") || sem.equals("") || date.equals("")) //add date null condition
             {
                 JOptionPane.showMessageDialog(this, "* field must have value");
             } else if (!(adno.matches("[0-9]+"))) {
@@ -551,6 +478,7 @@ public class editStudent extends javax.swing.JFrame {
     }
 
     private void insertDept() {
+        deptCB.removeAllItems();
         try {
             Connection con = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD);
             String sql = "select dept from course";
@@ -565,5 +493,31 @@ public class editStudent extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, e);
         }
     }
+
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTextField adnoTF;
+    private javax.swing.JButton cancelB;
+    private javax.swing.JButton deleteB;
+    private javax.swing.JComboBox<String> deptCB;
+    private javax.swing.JTextField dobTF;
+    private javax.swing.JRadioButton femaleRB;
+    private javax.swing.ButtonGroup genderRG;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
+    private javax.swing.JTextField mailTF;
+    private javax.swing.JRadioButton maleRB;
+    private javax.swing.JTextField nameTF;
+    private javax.swing.JTextField phoneTF;
+    private javax.swing.JTextField rnoTF;
+    private javax.swing.JTextField semTF;
+    private javax.swing.JButton updateB;
+    // End of variables declaration//GEN-END:variables
 
 }
