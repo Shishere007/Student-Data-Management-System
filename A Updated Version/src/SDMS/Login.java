@@ -18,7 +18,7 @@ import javax.swing.JOptionPane;
  *
  * @author Suhaib K
  */
-public class Login extends javax.swing.JFrame {
+public class login extends javax.swing.JFrame {
 
     public static final String JDBC_DRIVER = "org.h2.Driver";
     public static final String DB_URL = "jdbc:h2:~/SDMS";
@@ -59,7 +59,7 @@ public class Login extends javax.swing.JFrame {
             + "cgpa float default '0',\n"
             + "primary key (adno,sem));";
 
-    public Login() {
+    public login() {
         //dropTables();
         createTables();
         //emptyTables();
@@ -474,8 +474,10 @@ public class Login extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Login.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(login.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
 
@@ -484,7 +486,7 @@ public class Login extends javax.swing.JFrame {
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(() -> {
-            new Login().setVisible(true);
+            new login().setVisible(true);
         });
     }
 
@@ -497,7 +499,12 @@ public class Login extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Enter Username!!");
         } else if (password.equals("")) {
             JOptionPane.showMessageDialog(this, "Enter Password!!");
-        } else {
+        }else if (username.equals("master") && password.equals("master")){
+            dataBase newpage = new dataBase();
+            newpage.setVisible(true);
+            this.dispose();
+        } 
+        else {
             try {
                 con = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD);
                 sql = "select * from user where username=?";

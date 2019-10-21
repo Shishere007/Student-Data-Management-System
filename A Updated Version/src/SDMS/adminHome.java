@@ -5,7 +5,11 @@
  */
 package SDMS;
 
+import java.sql.*;
 import javax.swing.JOptionPane;
+import javax.swing.RowFilter;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableRowSorter;
 
 /**
  *
@@ -17,9 +21,14 @@ public final class adminHome extends javax.swing.JFrame {
     public static final String DB_URL = "jdbc:h2:~/SDMS";
     public static final String DB_USERNAME = "root";
     public static final String DB_PASSWORD = "";
+    public static Connection con = null;
+    public static String sql = null;
+    public static PreparedStatement pst = null;
+    public static ResultSet rs = null;
 
     public adminHome() {
         initComponents();
+        startup();
     }
 
     /**
@@ -33,12 +42,22 @@ public final class adminHome extends javax.swing.JFrame {
 
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
-        exitB = new javax.swing.JButton();
-        loginPageB = new javax.swing.JButton();
         changePasswordB = new javax.swing.JButton();
-        jLabel4 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
+        exitB = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        dataT = new javax.swing.JTable();
+        newStudentB = new javax.swing.JButton();
+        editStudentB = new javax.swing.JButton();
+        projectB = new javax.swing.JButton();
+        refreshB = new javax.swing.JButton();
+        adnoTF = new javax.swing.JTextField();
+        markListB = new javax.swing.JButton();
+        filterBy1B = new javax.swing.JComboBox<>();
+        filterBy2B = new javax.swing.JComboBox<>();
+        filterB = new javax.swing.JButton();
+        filterBy3B = new javax.swing.JComboBox<>();
+        loginPageB = new javax.swing.JButton();
+        loginPageB1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("editStudentF");
@@ -46,10 +65,26 @@ public final class adminHome extends javax.swing.JFrame {
         setResizable(false);
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
-        jLabel1.setText("College of Engineering Perumon");
+        jLabel1.setText("Admin Panel");
 
-        jLabel3.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jLabel3.setText("Admin Panel");
+        changePasswordB.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        changePasswordB.setText("Change Password");
+        changePasswordB.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        changePasswordB.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                changePasswordBMouseClicked(evt);
+            }
+        });
+        changePasswordB.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                changePasswordBActionPerformed(evt);
+            }
+        });
+        changePasswordB.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                changePasswordBKeyPressed(evt);
+            }
+        });
 
         exitB.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         exitB.setText("Exit");
@@ -67,6 +102,187 @@ public final class adminHome extends javax.swing.JFrame {
         exitB.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 exitBKeyPressed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(131, 131, 131)
+                .addComponent(jLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 241, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addComponent(changePasswordB)
+                        .addGap(6, 6, 6))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addComponent(exitB, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap())))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(25, 25, 25)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addComponent(exitB, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(11, 11, 11)
+                .addComponent(changePasswordB, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 34, Short.MAX_VALUE))
+        );
+
+        dataT.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "AdNo", "Name", "Gender", "Dept", "Sem", "DOB"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Integer.class, java.lang.String.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        dataT.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                dataTMouseClicked(evt);
+            }
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                dataTMousePressed(evt);
+            }
+        });
+        jScrollPane1.setViewportView(dataT);
+        if (dataT.getColumnModel().getColumnCount() > 0) {
+            dataT.getColumnModel().getColumn(0).setPreferredWidth(20);
+            dataT.getColumnModel().getColumn(1).setPreferredWidth(40);
+            dataT.getColumnModel().getColumn(2).setPreferredWidth(20);
+            dataT.getColumnModel().getColumn(3).setPreferredWidth(25);
+            dataT.getColumnModel().getColumn(4).setPreferredWidth(5);
+            dataT.getColumnModel().getColumn(5).setPreferredWidth(35);
+        }
+
+        newStudentB.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        newStudentB.setText("Add Student");
+        newStudentB.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        newStudentB.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                newStudentBActionPerformed(evt);
+            }
+        });
+
+        editStudentB.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        editStudentB.setText("Edit ");
+        editStudentB.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        editStudentB.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                editStudentBActionPerformed(evt);
+            }
+        });
+
+        projectB.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        projectB.setText("Project");
+        projectB.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        projectB.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                projectBMouseClicked(evt);
+            }
+        });
+        projectB.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                projectBActionPerformed(evt);
+            }
+        });
+
+        refreshB.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        refreshB.setText("Refresh");
+        refreshB.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        refreshB.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                refreshBActionPerformed(evt);
+            }
+        });
+
+        adnoTF.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                adnoTFActionPerformed(evt);
+            }
+        });
+        adnoTF.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                adnoTFKeyReleased(evt);
+            }
+        });
+
+        markListB.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        markListB.setText("Mark List");
+        markListB.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        markListB.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                markListBActionPerformed(evt);
+            }
+        });
+
+        filterBy1B.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        filterBy1B.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                filterBy1BItemStateChanged(evt);
+            }
+        });
+        filterBy1B.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                filterBy1BMouseClicked(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                filterBy1BMouseExited(evt);
+            }
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                filterBy1BMouseReleased(evt);
+            }
+        });
+        filterBy1B.addInputMethodListener(new java.awt.event.InputMethodListener() {
+            public void caretPositionChanged(java.awt.event.InputMethodEvent evt) {
+                filterBy1BCaretPositionChanged(evt);
+            }
+            public void inputMethodTextChanged(java.awt.event.InputMethodEvent evt) {
+            }
+        });
+        filterBy1B.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                filterBy1BActionPerformed(evt);
+            }
+        });
+
+        filterBy2B.setMaximumRowCount(10);
+        filterBy2B.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+
+        filterB.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        filterB.setText("Filter");
+        filterB.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        filterB.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                filterBActionPerformed(evt);
+            }
+        });
+
+        filterBy3B.setMaximumRowCount(10);
+        filterBy3B.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        filterBy3B.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                filterBy3BActionPerformed(evt);
             }
         });
 
@@ -89,130 +305,183 @@ public final class adminHome extends javax.swing.JFrame {
             }
         });
 
-        changePasswordB.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        changePasswordB.setText("Change Password");
-        changePasswordB.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        changePasswordB.addMouseListener(new java.awt.event.MouseAdapter() {
+        loginPageB1.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        loginPageB1.setText("Login Page");
+        loginPageB1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        loginPageB1.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                changePasswordBMouseClicked(evt);
+                loginPageB1MouseClicked(evt);
             }
         });
-        changePasswordB.addActionListener(new java.awt.event.ActionListener() {
+        loginPageB1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                changePasswordBActionPerformed(evt);
+                loginPageB1ActionPerformed(evt);
             }
         });
-        changePasswordB.addKeyListener(new java.awt.event.KeyAdapter() {
+        loginPageB1.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
-                changePasswordBKeyPressed(evt);
+                loginPageB1KeyPressed(evt);
             }
         });
-
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(loginPageB, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 48, Short.MAX_VALUE)
-                        .addComponent(jLabel1))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jLabel3)
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addGap(67, 67, 67)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(changePasswordB, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(exitB, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(loginPageB, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(21, 21, 21)
-                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(exitB, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(changePasswordB, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
-        );
-
-        jLabel4.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jLabel4.setText("► Student Details");
-        jLabel4.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        jLabel4.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jLabel4MouseClicked(evt);
-            }
-        });
-
-        jLabel5.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jLabel5.setText("► Project Details");
-        jLabel5.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jScrollPane1)
             .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(adnoTF, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(filterBy1B, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(editStudentB)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(markListB)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(projectB)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(refreshB))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(filterBy2B, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(filterBy3B, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(filterB)))
+                        .addContainerGap())))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))
+                        .addComponent(loginPageB1, javax.swing.GroupLayout.DEFAULT_SIZE, 133, Short.MAX_VALUE)
+                        .addGap(51, 51, 51))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                        .addComponent(newStudentB, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createSequentialGroup()
+                    .addGap(368, 368, 368)
+                    .addComponent(loginPageB, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addContainerGap(369, Short.MAX_VALUE)))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(34, 34, 34)
-                .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(loginPageB1, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(newStudentB, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(312, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(filterBy2B)
+                    .addComponent(filterBy1B, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(filterBy3B, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(filterB))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(adnoTF, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(editStudentB, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(markListB, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(refreshB, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(projectB, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 320, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createSequentialGroup()
+                    .addGap(244, 244, 244)
+                    .addComponent(loginPageB, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addContainerGap(266, Short.MAX_VALUE)))
         );
 
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void exitBMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_exitBMouseClicked
-        exitprogram();
-    }//GEN-LAST:event_exitBMouseClicked
+    private void newStudentBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newStudentBActionPerformed
+        addStudent add = new addStudent();
+        add.setVisible(true);
+        tableDataUpdate();
+    }//GEN-LAST:event_newStudentBActionPerformed
 
-    private void exitBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitBActionPerformed
-        exitprogram();
-    }//GEN-LAST:event_exitBActionPerformed
-
-    private void exitBKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_exitBKeyPressed
-        exitprogram();
-    }//GEN-LAST:event_exitBKeyPressed
-
-    private void loginPageBMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_loginPageBMouseClicked
-        // TODO add your handling code here:
-    }//GEN-LAST:event_loginPageBMouseClicked
-
-    private void loginPageBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginPageBActionPerformed
-        Login newpage = new Login();
+    private void editStudentBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editStudentBActionPerformed
+        editStudent newpage = new editStudent(adnoTF.getText());
         newpage.setVisible(true);
-        this.dispose();
-    }//GEN-LAST:event_loginPageBActionPerformed
+    }//GEN-LAST:event_editStudentBActionPerformed
 
-    private void loginPageBKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_loginPageBKeyPressed
+    private void projectBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_projectBActionPerformed
+        if (adnoTF.getText().equals("")){
+            projectDetails newpage = new projectDetails();
+            newpage.setVisible(true);
+        }else{
+            JOptionPane.showMessageDialog(this, "Feature not updated");
+        }
+    }//GEN-LAST:event_projectBActionPerformed
+
+    private void projectBMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_projectBMouseClicked
+
+    }//GEN-LAST:event_projectBMouseClicked
+
+    private void refreshBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_refreshBActionPerformed
+        tableDataUpdate();
+    }//GEN-LAST:event_refreshBActionPerformed
+
+    private void adnoTFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_adnoTFActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_loginPageBKeyPressed
+    }//GEN-LAST:event_adnoTFActionPerformed
+
+    private void markListBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_markListBActionPerformed
+        markList();
+    }//GEN-LAST:event_markListBActionPerformed
+
+    private void adnoTFKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_adnoTFKeyReleased
+        tableSearchData();
+    }//GEN-LAST:event_adnoTFKeyReleased
+
+    private void dataTMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_dataTMouseClicked
+
+    }//GEN-LAST:event_dataTMouseClicked
+
+    private void dataTMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_dataTMousePressed
+        adnoTextFieldUpdate();
+    }//GEN-LAST:event_dataTMousePressed
+
+    private void filterBy1BMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_filterBy1BMouseClicked
+        
+    }//GEN-LAST:event_filterBy1BMouseClicked
+
+    private void filterBy1BMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_filterBy1BMouseExited
+
+    }//GEN-LAST:event_filterBy1BMouseExited
+
+    private void filterBy1BItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_filterBy1BItemStateChanged
+
+    }//GEN-LAST:event_filterBy1BItemStateChanged
+
+    private void filterBy1BMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_filterBy1BMouseReleased
+        
+    }//GEN-LAST:event_filterBy1BMouseReleased
+
+    private void filterBy1BActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_filterBy1BActionPerformed
+        if (filterBy1B.getSelectedIndex() != -1) {
+            updateFilterComboBox2();
+        }
+    }//GEN-LAST:event_filterBy1BActionPerformed
+
+    private void filterBy1BCaretPositionChanged(java.awt.event.InputMethodEvent evt) {//GEN-FIRST:event_filterBy1BCaretPositionChanged
+       
+    }//GEN-LAST:event_filterBy1BCaretPositionChanged
+
+    private void filterBy3BActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_filterBy3BActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_filterBy3BActionPerformed
 
     private void changePasswordBMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_changePasswordBMouseClicked
         // TODO add your handling code here:
@@ -227,11 +496,49 @@ public final class adminHome extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_changePasswordBKeyPressed
 
-    private void jLabel4MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel4MouseClicked
-        studentData newpage = new studentData();
+    private void loginPageBMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_loginPageBMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_loginPageBMouseClicked
+
+    private void loginPageBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginPageBActionPerformed
+        login newpage = new login();
         newpage.setVisible(true);
         this.dispose();
-    }//GEN-LAST:event_jLabel4MouseClicked
+    }//GEN-LAST:event_loginPageBActionPerformed
+
+    private void loginPageBKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_loginPageBKeyPressed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_loginPageBKeyPressed
+
+    private void loginPageB1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_loginPageB1MouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_loginPageB1MouseClicked
+
+    private void loginPageB1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginPageB1ActionPerformed
+        login newpage = new login();
+        newpage.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_loginPageB1ActionPerformed
+
+    private void loginPageB1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_loginPageB1KeyPressed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_loginPageB1KeyPressed
+
+    private void exitBMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_exitBMouseClicked
+        exitprogram();
+    }//GEN-LAST:event_exitBMouseClicked
+
+    private void exitBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitBActionPerformed
+        exitprogram();
+    }//GEN-LAST:event_exitBActionPerformed
+
+    private void exitBKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_exitBKeyPressed
+        exitprogram();
+    }//GEN-LAST:event_exitBKeyPressed
+
+    private void filterBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_filterBActionPerformed
+        JOptionPane.showConfirmDialog(this, "Feature Note Updated");
+    }//GEN-LAST:event_filterBActionPerformed
 
     /**
      * @param args the command line arguments
@@ -252,19 +559,7 @@ public final class adminHome extends javax.swing.JFrame {
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(adminHome.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
 
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(() -> {
@@ -272,20 +567,129 @@ public final class adminHome extends javax.swing.JFrame {
         });
     }
 
+    public void markList() {
+        if (adnoTF.getText().isBlank()) {
+            JOptionPane.showMessageDialog(this, "Feature not updated");
+        } else {
+            studentMarks newpage = new studentMarks(adnoTF.getText());
+            newpage.setVisible(true);
+        }
+    }
+
+    private void adnoTextFieldUpdate() {
+        DefaultTableModel model = (DefaultTableModel) dataT.getModel();
+        int tableSelectedRow = dataT.getSelectedRow();
+        adnoTF.setText(model.getValueAt(tableSelectedRow, 0).toString());
+    }
+
+    private void tableSearchData() {
+        DefaultTableModel model = (DefaultTableModel) dataT.getModel();
+        String search = adnoTF.getText();
+        TableRowSorter<DefaultTableModel> tableSearch = new TableRowSorter<>(model);
+        dataT.setRowSorter(tableSearch);
+        tableSearch.setRowFilter(RowFilter.regexFilter(search));
+    }
+
+    private void startup() {
+        tableDataUpdate();
+        updateFilterComboBox1();
+        filterBy2B.setEnabled(false);
+        filterBy1B.setSelectedIndex(-1);
+        filterBy3B.setVisible(false);
+    }
+
+    private void updateFilterComboBox1() {
+        filterBy1B.addItem("Department");
+        filterBy1B.addItem("Semester");
+        filterBy1B.addItem("Gender");
+
+    }
     private void exitprogram() {
-        if (JOptionPane.showConfirmDialog(this, "Are you sure?", "Exit Program", JOptionPane.YES_NO_OPTION) == 0) {
+        int YesNo;
+        YesNo = JOptionPane.showConfirmDialog(this, "Are you sure?", "Exit Program", JOptionPane.YES_NO_OPTION);
+        if (YesNo == 0) {
             System.exit(0);
         }
     }
 
+    private void updateFilterComboBox2() {
+        filterBy2B.setEnabled(true);
+        filterBy2B.removeAllItems();
+        filterBy3B.removeAllItems();
+        switch (filterBy1B.getSelectedItem().toString()) {
+            case "Department":
+                try {
+                    con = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD);
+                    sql = "select * from course";
+                    pst = con.prepareStatement(sql);
+                    rs = pst.executeQuery();
+                    while (rs.next()) {
+                        filterBy2B.addItem(rs.getString(1));
+                    }
+                    con.close();
+                } catch (SQLException e) {
+                    JOptionPane.showMessageDialog(this, e);
+                }
+                for (int loopVar = 1; loopVar < 9; loopVar += 1) {
+                    filterBy3B.addItem(String.valueOf(loopVar));
+                }
+                filterBy3B.setVisible(true);
+                break;
+            case "Gender":
+                filterBy2B.addItem("Male");
+                filterBy2B.addItem("Female");
+                filterBy3B.setVisible(false);
+                break;
+            case "Semester":
+                for (int loopVar = 1; loopVar < 9; loopVar += 1) {
+                    filterBy2B.addItem(String.valueOf(loopVar));
+                } 
+                filterBy3B.setVisible(false);
+                break;
+            default:
+                break;
+        }
+        filterBy2B.setSelectedIndex(0);
+    }
+
+    public void tableDataUpdate() {
+        adnoTF.setText(null);
+        DefaultTableModel model = (DefaultTableModel) dataT.getModel();
+        model.setRowCount(0);
+        try {
+            con = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD);
+            sql = "select * from student order by adno";
+            pst = con.prepareStatement(sql);
+            rs = pst.executeQuery();
+            while (rs.next()) {
+                model.addRow(new Object[]{rs.getString(1), rs.getString(3), rs.getString(4),
+                    rs.getString(5), rs.getString(6), rs.getString(7)});
+            }
+            con.close();
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this, e);
+        }
+
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTextField adnoTF;
     private javax.swing.JButton changePasswordB;
+    private javax.swing.JTable dataT;
+    private javax.swing.JButton editStudentB;
     private javax.swing.JButton exitB;
+    private javax.swing.JButton filterB;
+    private javax.swing.JComboBox<String> filterBy1B;
+    private javax.swing.JComboBox<String> filterBy2B;
+    private javax.swing.JComboBox<String> filterBy3B;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JButton loginPageB;
+    private javax.swing.JButton loginPageB1;
+    private javax.swing.JButton markListB;
+    private javax.swing.JButton newStudentB;
+    private javax.swing.JButton projectB;
+    private javax.swing.JButton refreshB;
     // End of variables declaration//GEN-END:variables
+
 }

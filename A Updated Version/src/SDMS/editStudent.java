@@ -20,6 +20,10 @@ public class editStudent extends javax.swing.JFrame {
     public static final String DB_URL = "jdbc:h2:~/SDMS";
     public static final String DB_USERNAME = "root";
     public static final String DB_PASSWORD = "";
+    public static Connection con = null;
+    public static String sql = null;
+    public static PreparedStatement pst = null;
+    public static ResultSet rs = null;
     String adno;
 
     public editStudent() {
@@ -296,11 +300,11 @@ public class editStudent extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void nameTFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nameTFActionPerformed
-      
+
     }//GEN-LAST:event_nameTFActionPerformed
 
     private void rnoTFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rnoTFActionPerformed
-        
+
     }//GEN-LAST:event_rnoTFActionPerformed
 
     private void updateBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateBActionPerformed
@@ -316,11 +320,11 @@ public class editStudent extends javax.swing.JFrame {
     }//GEN-LAST:event_deleteBActionPerformed
 
     private void phoneTFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_phoneTFActionPerformed
-        
+
     }//GEN-LAST:event_phoneTFActionPerformed
 
     private void adnoTFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_adnoTFActionPerformed
-        
+
     }//GEN-LAST:event_adnoTFActionPerformed
 
     private void adnoTFKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_adnoTFKeyPressed
@@ -336,25 +340,25 @@ public class editStudent extends javax.swing.JFrame {
     private void rnoTFKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_rnoTFKeyPressed
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
             updateData();
-        }        
+        }
     }//GEN-LAST:event_rnoTFKeyPressed
 
     private void dobTFKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_dobTFKeyPressed
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
             updateData();
-        }        
+        }
     }//GEN-LAST:event_dobTFKeyPressed
 
     private void mailTFKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_mailTFKeyPressed
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
             updateData();
-        }        
+        }
     }//GEN-LAST:event_mailTFKeyPressed
 
     private void phoneTFKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_phoneTFKeyPressed
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
             updateData();
-        }        
+        }
     }//GEN-LAST:event_phoneTFKeyPressed
 
     /**
@@ -391,9 +395,9 @@ public class editStudent extends javax.swing.JFrame {
     private void deleteData() {
         String username = (String) adno;
         try {
-            Connection con = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD);
-            String sql = "delete from student where adno=?";
-            PreparedStatement pst = con.prepareStatement(sql);
+            con = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD);
+            sql = "delete from student where adno=?";
+            pst = con.prepareStatement(sql);
             pst.setString(1, (String) adno);
             pst.executeUpdate();
             sql = "delete from user where username=?";
@@ -429,11 +433,11 @@ public class editStudent extends javax.swing.JFrame {
 
     private void insertData() {
         try {
-            Connection con = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD);
-            String sql = "select * from student where adno=?";
-            PreparedStatement pst = con.prepareStatement(sql);
+            con = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD);
+            sql = "select * from student where adno=?";
+            pst = con.prepareStatement(sql);
             pst.setString(1, (String) adno);
-            ResultSet rs = pst.executeQuery();
+            rs = pst.executeQuery();
             if (rs.next()) {
                 rnoTF.setText(String.valueOf(rs.getInt(2)));
                 nameTF.setText(rs.getString(3));
@@ -481,9 +485,9 @@ public class editStudent extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(this, "Invalid Characters");
             } else {
                 try {
-                    Connection con = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD);
-                    String sql = "delete from student where adno=?";
-                    PreparedStatement pst = con.prepareStatement(sql);
+                    con = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD);
+                    sql = "delete from student where adno=?";
+                    pst = con.prepareStatement(sql);
                     pst.setString(1, adno);
                     pst.executeUpdate();
                     sql = "insert into student values(?,?,?,?,?,?,?,?,?)";
@@ -533,10 +537,10 @@ public class editStudent extends javax.swing.JFrame {
     private void insertDeptandSem() {
         deptCB.removeAllItems();
         try {
-            Connection con = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD);
-            String sql = "select dept from course";
-            PreparedStatement pst = con.prepareStatement(sql);
-            ResultSet rs = pst.executeQuery();
+            con = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD);
+            sql = "select dept from course";
+            pst = con.prepareStatement(sql);
+            rs = pst.executeQuery();
             while (rs.next()) {
                 deptCB.addItem(rs.getString(1));
             }

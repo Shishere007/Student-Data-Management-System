@@ -12,7 +12,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import javax.swing.JOptionPane;
+import javax.swing.RowFilter;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableRowSorter;
 
 /**
  *
@@ -28,7 +30,6 @@ public class projectDetails extends javax.swing.JFrame {
     public projectDetails() {
         initComponents();
         updateTable();
-        insertAdno();
     }
 
     /**
@@ -47,7 +48,7 @@ public class projectDetails extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         rejectB = new javax.swing.JButton();
         cancelB = new javax.swing.JButton();
-        adnoCB = new javax.swing.JComboBox<>();
+        adnoTF = new javax.swing.JTextField();
         jPanel3 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         projectListT = new javax.swing.JTable();
@@ -114,7 +115,11 @@ public class projectDetails extends javax.swing.JFrame {
             }
         });
 
-        adnoCB.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        adnoTF.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                adnoTFKeyReleased(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -123,9 +128,9 @@ public class projectDetails extends javax.swing.JFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel2)
-                .addGap(6, 6, 6)
-                .addComponent(adnoCB, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(adnoTF, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
                 .addComponent(approveB)
                 .addGap(2, 2, 2)
                 .addComponent(rejectB)
@@ -142,7 +147,7 @@ public class projectDetails extends javax.swing.JFrame {
                     .addComponent(jLabel2)
                     .addComponent(rejectB)
                     .addComponent(cancelB)
-                    .addComponent(adnoCB, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(adnoTF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
 
@@ -170,6 +175,14 @@ public class projectDetails extends javax.swing.JFrame {
             }
         });
         projectListT.getTableHeader().setReorderingAllowed(false);
+        projectListT.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                projectListTMouseClicked(evt);
+            }
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                projectListTMousePressed(evt);
+            }
+        });
         jScrollPane1.setViewportView(projectListT);
         if (projectListT.getColumnModel().getColumnCount() > 0) {
             projectListT.getColumnModel().getColumn(0).setResizable(false);
@@ -236,6 +249,18 @@ public class projectDetails extends javax.swing.JFrame {
         reject();
     }//GEN-LAST:event_rejectBMouseClicked
 
+    private void projectListTMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_projectListTMouseClicked
+
+    }//GEN-LAST:event_projectListTMouseClicked
+
+    private void projectListTMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_projectListTMousePressed
+        adnoTextFieldUpdate();
+    }//GEN-LAST:event_projectListTMousePressed
+
+    private void adnoTFKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_adnoTFKeyReleased
+        tableSearchData();
+    }//GEN-LAST:event_adnoTFKeyReleased
+
     /**
      * @param args the command line arguments
      */
@@ -284,8 +309,22 @@ public class projectDetails extends javax.swing.JFrame {
         }
     }
 
+    private void adnoTextFieldUpdate() {
+        DefaultTableModel model = (DefaultTableModel) projectListT.getModel();
+        int tableSelectedRow = projectListT.getSelectedRow();
+        adnoTF.setText(model.getValueAt(tableSelectedRow, 0).toString());
+    }
+
+    private void tableSearchData() {
+        DefaultTableModel model = (DefaultTableModel) projectListT.getModel();
+        String search = adnoTF.getText();
+        TableRowSorter<DefaultTableModel> tableSearch = new TableRowSorter<>(model);
+        projectListT.setRowSorter(tableSearch);
+        tableSearch.setRowFilter(RowFilter.regexFilter(search));
+    }
+
     private void approve() {
-        if (adnoCB.getSelectedIndex() < 0) {
+        if (adnoTF.getText().equals("")) {
             JOptionPane.showMessageDialog(this, "Choose Admission Number", "Error", JOptionPane.OK_OPTION);
         } else {
 
@@ -293,7 +332,7 @@ public class projectDetails extends javax.swing.JFrame {
                 Connection con = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD);
                 String sql = "update project set approved = 'Yes' where adno=?";
                 PreparedStatement pst = con.prepareStatement(sql);
-                pst.setString(1, String.valueOf(adnoCB.getSelectedItem()));
+                pst.setString(1, adnoTF.getText());
                 pst.executeUpdate();
                 JOptionPane.showMessageDialog(this, "Update Success");
                 con.close();
@@ -304,24 +343,8 @@ public class projectDetails extends javax.swing.JFrame {
         updateTable();
     }
 
-    private void insertAdno() {
-        try {
-            Connection con = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD);
-            String sql = "select adno from project";
-            PreparedStatement pst = con.prepareStatement(sql);
-            ResultSet rs = pst.executeQuery();
-            while (rs.next()) {
-                adnoCB.addItem(rs.getString(1));
-            }
-            con.close();
-        } catch (SQLException e) {
-            JOptionPane.showInputDialog(this, e);
-        }
-        adnoCB.setSelectedIndex(-1);
-    }
-
     private void reject() {
-        if (adnoCB.getSelectedIndex() < 0) {
+        if (adnoTF.getText().equals("")) {
             JOptionPane.showMessageDialog(this, "Choose Admission Number", "Error", JOptionPane.OK_OPTION);
         } else {
 
@@ -329,7 +352,7 @@ public class projectDetails extends javax.swing.JFrame {
                 Connection con = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD);
                 String sql = "update project set approved = 'RJT' where adno=?";
                 PreparedStatement pst = con.prepareStatement(sql);
-                pst.setString(1, String.valueOf(adnoCB.getSelectedItem()));
+                pst.setString(1, adnoTF.getText());
                 pst.executeUpdate();
                 JOptionPane.showMessageDialog(this, "Update Success");
                 con.close();
@@ -341,7 +364,7 @@ public class projectDetails extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JComboBox<String> adnoCB;
+    private javax.swing.JTextField adnoTF;
     private javax.swing.JButton approveB;
     private javax.swing.JButton cancelB;
     private javax.swing.JLabel jLabel1;
