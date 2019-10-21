@@ -6,7 +6,9 @@
 package SDMS;
 
 import java.sql.*;
-import javax.swing.JOptionPane;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -34,8 +36,9 @@ public class testPanel extends javax.swing.JFrame {
 
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        newProgress = new javax.swing.JProgressBar();
         jButton1 = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tableT = new javax.swing.JTable();
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel1.setText("Marks in Subjects");
@@ -58,9 +61,6 @@ public class testPanel extends javax.swing.JFrame {
         );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setPreferredSize(new java.awt.Dimension(751, 534));
-
-        newProgress.setForeground(new java.awt.Color(51, 255, 255));
 
         jButton1.setText("start");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -69,6 +69,24 @@ public class testPanel extends javax.swing.JFrame {
             }
         });
 
+        tableT.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "dept", "deptname"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.String.class
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+        });
+        jScrollPane1.setViewportView(tableT);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -76,28 +94,41 @@ public class testPanel extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(214, 214, 214)
-                        .addComponent(newProgress, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
                         .addGap(288, 288, 288)
-                        .addComponent(jButton1)))
-                .addContainerGap(323, Short.MAX_VALUE))
+                        .addComponent(jButton1))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(66, 66, 66)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(233, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(106, 106, 106)
                 .addComponent(jButton1)
-                .addGap(63, 63, 63)
-                .addComponent(newProgress, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(267, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 115, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 318, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        load();
+        try {
+            DefaultTableModel model = (DefaultTableModel) tableT.getModel();
+            Connection con = DriverManager.getConnection(DB_URL,DB_USERNAME,DB_PASSWORD);
+            String sql = "select * from course";
+            PreparedStatement pst = con.prepareStatement(sql);
+            ResultSet rs = pst.executeQuery();
+            while (rs.next()){
+                model.addRow(new Object[]{rs.getString(1), rs.getString(2)});
+            }
+            con.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(testPanel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
 
     }//GEN-LAST:event_jButton1ActionPerformed
 
@@ -135,18 +166,9 @@ public class testPanel extends javax.swing.JFrame {
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
-    public static javax.swing.JProgressBar newProgress;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTable tableT;
     // End of variables declaration//GEN-END:variables
 
-    private void load() {
-        try {
-            for (int x = 0; x <= 100; x++) {
-                Thread.sleep(120);
-
-                //testPanel.newProgress.setText(Integer.toString(x)+"%"); 
-                //testPanel.newProgress.setValue(x);
-            }
-        } catch (Exception e) {
-        }
-    }
+   
 }

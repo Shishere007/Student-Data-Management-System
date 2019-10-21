@@ -6,9 +6,8 @@
 package SDMS;
 
 import java.awt.HeadlessException;
+import java.awt.event.KeyEvent;
 import java.sql.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 /**
@@ -24,7 +23,7 @@ public class addStudent extends javax.swing.JFrame {
 
     public addStudent() {
         initComponents();
-        insertDept();
+        insertDeptandSem();
         clearfield();
     }
 
@@ -49,7 +48,6 @@ public class addStudent extends javax.swing.JFrame {
         jLabel9 = new javax.swing.JLabel();
         mailTF = new javax.swing.JTextField();
         phoneTF = new javax.swing.JTextField();
-        semTF = new javax.swing.JTextField();
         dobTF = new javax.swing.JTextField();
         nameTF = new javax.swing.JTextField();
         rnoTF = new javax.swing.JTextField();
@@ -68,6 +66,7 @@ public class addStudent extends javax.swing.JFrame {
         submitB = new javax.swing.JButton();
         errorPhone = new javax.swing.JLabel();
         hintB = new javax.swing.JButton();
+        semCB = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -98,9 +97,29 @@ public class addStudent extends javax.swing.JFrame {
         jLabel9.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel9.setText("Phone Number:");
 
+        mailTF.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                mailTFKeyPressed(evt);
+            }
+        });
+
         phoneTF.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 phoneTFActionPerformed(evt);
+            }
+        });
+        phoneTF.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                phoneTFKeyPressed(evt);
+            }
+        });
+
+        dobTF.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                dobTFKeyPressed(evt);
+            }
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                dobTFKeyReleased(evt);
             }
         });
 
@@ -109,10 +128,20 @@ public class addStudent extends javax.swing.JFrame {
                 nameTFActionPerformed(evt);
             }
         });
+        nameTF.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                nameTFKeyPressed(evt);
+            }
+        });
 
         rnoTF.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 rnoTFActionPerformed(evt);
+            }
+        });
+        rnoTF.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                rnoTFKeyPressed(evt);
             }
         });
 
@@ -154,6 +183,11 @@ public class addStudent extends javax.swing.JFrame {
                 adnoTFActionPerformed(evt);
             }
         });
+        adnoTF.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                adnoTFKeyPressed(evt);
+            }
+        });
 
         jLabel10.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
         jLabel10.setText("New Student");
@@ -187,6 +221,11 @@ public class addStudent extends javax.swing.JFrame {
 
         hintB.setText("?");
         hintB.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        hintB.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                hintBFocusGained(evt);
+            }
+        });
         hintB.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 hintBActionPerformed(evt);
@@ -197,6 +236,8 @@ public class addStudent extends javax.swing.JFrame {
                 hintBKeyPressed(evt);
             }
         });
+
+        semCB.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -219,7 +260,6 @@ public class addStudent extends javax.swing.JFrame {
                     .addComponent(nameTF, javax.swing.GroupLayout.DEFAULT_SIZE, 165, Short.MAX_VALUE)
                     .addComponent(rnoTF)
                     .addComponent(dobTF)
-                    .addComponent(semTF)
                     .addComponent(phoneTF)
                     .addComponent(mailTF)
                     .addGroup(layout.createSequentialGroup()
@@ -227,7 +267,8 @@ public class addStudent extends javax.swing.JFrame {
                         .addGap(18, 18, 18)
                         .addComponent(femaleRB))
                     .addComponent(adnoTF)
-                    .addComponent(deptCB, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(deptCB, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(semCB, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(errorADNO, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -287,8 +328,8 @@ public class addStudent extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(semTF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(errorSEM))
+                    .addComponent(errorSEM)
+                    .addComponent(semCB, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -359,6 +400,49 @@ public class addStudent extends javax.swing.JFrame {
         JOptionPane.showMessageDialog(this, "Format: YYYY-MM-DD");
     }//GEN-LAST:event_hintBKeyPressed
 
+    private void dobTFKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_dobTFKeyReleased
+    }//GEN-LAST:event_dobTFKeyReleased
+
+    private void dobTFKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_dobTFKeyPressed
+        if(evt.getKeyCode() == KeyEvent.VK_ENTER){
+            submit();
+        }
+    }//GEN-LAST:event_dobTFKeyPressed
+
+    private void adnoTFKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_adnoTFKeyPressed
+        if(evt.getKeyCode() == KeyEvent.VK_ENTER){
+            submit();
+        }
+    }//GEN-LAST:event_adnoTFKeyPressed
+
+    private void nameTFKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_nameTFKeyPressed
+        if(evt.getKeyCode() == KeyEvent.VK_ENTER){
+            submit();
+        }
+    }//GEN-LAST:event_nameTFKeyPressed
+
+    private void rnoTFKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_rnoTFKeyPressed
+       if(evt.getKeyCode() == KeyEvent.VK_ENTER){
+            submit();
+        }
+    }//GEN-LAST:event_rnoTFKeyPressed
+
+    private void mailTFKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_mailTFKeyPressed
+        if(evt.getKeyCode() == KeyEvent.VK_ENTER){
+            submit();
+        }
+    }//GEN-LAST:event_mailTFKeyPressed
+
+    private void phoneTFKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_phoneTFKeyPressed
+        if(evt.getKeyCode() == KeyEvent.VK_ENTER){
+            submit();
+        }
+    }//GEN-LAST:event_phoneTFKeyPressed
+
+    private void hintBFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_hintBFocusGained
+       
+    }//GEN-LAST:event_hintBFocusGained
+
     /**
      * @param args the command line arguments
      */
@@ -400,12 +484,11 @@ public class addStudent extends javax.swing.JFrame {
         String adno = adnoTF.getText();
         String name = nameTF.getText();
         String rno = rnoTF.getText();
-        String sem = semTF.getText();
         String mail = mailTF.getText();
         String username = adno;
         clearError();
         try {
-            if (adno.equals("") || name.equals("") || rnoTF.getText().equals("") || sem.equals("") || date.equals("")) {
+            if (adno.equals("") || name.equals("") || rnoTF.getText().equals("") || date.equals("")) {
                 JOptionPane.showMessageDialog(this, "* field must have value");
             } else if (!(adno.matches("[0-9]+"))) {
                 errorADNO.setText("Invalid");
@@ -415,8 +498,6 @@ public class addStudent extends javax.swing.JFrame {
                 errorRNO.setText("Invalid");
             } else if (deptCB.getSelectedIndex() < 0) {
                 JOptionPane.showMessageDialog(this, "Department not selected");
-            } else if (!(sem.matches("[0-9]+")) || (sem.matches("[0-9]+") && (Integer.valueOf(sem) < 1 || Integer.valueOf(sem) > 8))) {
-                errorSEM.setText("Invalid");
             } else if ((!(mail.contains("@")) && !(mail.contains(".com"))) && (!(mail.equals(""))) && mail.length() < 12) {
                 errorMAIL.setText("Invalid");
             } else if (!(phone.equals("")) && (phone.length() != 10)) {
@@ -444,7 +525,7 @@ public class addStudent extends javax.swing.JFrame {
                             pst.setString(4, "Female");
                         }
                         pst.setString(5, deptCB.getSelectedItem().toString());
-                        pst.setString(6, semTF.getText());
+                        pst.setString(6, semCB.getSelectedItem().toString());
                         pst.setString(7, dobTF.getText());
                         pst.setString(8, mailTF.getText());
                         pst.setString(9, phoneTF.getText());
@@ -474,11 +555,11 @@ public class addStudent extends javax.swing.JFrame {
         adnoTF.setText(null);
         nameTF.setText(null);
         rnoTF.setText(null);
-        semTF.setText(null);
         phoneTF.setText(null);
         mailTF.setText(null);
         dobTF.setText(null);
         deptCB.setSelectedIndex(-1);
+        semCB.setSelectedIndex(-1);
     }
 
     private void clearError() {
@@ -490,7 +571,8 @@ public class addStudent extends javax.swing.JFrame {
         errorPhone.setText(null);
     }
 
-    private void insertDept() {
+    private void insertDeptandSem() {
+        deptCB.removeAllItems();
         try {
             Connection con = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD);
             String sql = "select dept from course";
@@ -500,11 +582,14 @@ public class addStudent extends javax.swing.JFrame {
                 deptCB.addItem(rs.getString(1));
             }
             con.close();
+            deptCB.setSelectedIndex(-1);
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(this, e);
         }
+        for (int loopVar = 1; loopVar < 9; loopVar += 1) {
+            semCB.addItem(String.valueOf(loopVar));
+        }
     }
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField adnoTF;
     private javax.swing.JButton cancelB;
@@ -535,7 +620,7 @@ public class addStudent extends javax.swing.JFrame {
     private javax.swing.JTextField nameTF;
     private javax.swing.JTextField phoneTF;
     private javax.swing.JTextField rnoTF;
-    private javax.swing.JTextField semTF;
+    private javax.swing.JComboBox<String> semCB;
     private javax.swing.JButton submitB;
     // End of variables declaration//GEN-END:variables
 

@@ -42,20 +42,22 @@
                   <Component id="jLabel5" alignment="0" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace min="-2" pref="70" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                  <Component id="deptCB" min="-2" pref="161" max="-2" attributes="0"/>
-                  <Group type="102" attributes="0">
-                      <Component id="maleRB" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace type="separate" max="-2" attributes="0"/>
-                      <Component id="femaleRB" min="-2" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                      <Component id="deptCB" min="-2" pref="161" max="-2" attributes="0"/>
+                      <Group type="102" attributes="0">
+                          <Component id="maleRB" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace type="separate" max="-2" attributes="0"/>
+                          <Component id="femaleRB" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <Component id="nameTF" pref="165" max="32767" attributes="0"/>
+                      <Component id="rnoTF" max="32767" attributes="0"/>
+                      <Component id="dobTF" alignment="0" max="32767" attributes="0"/>
+                      <Component id="phoneTF" max="32767" attributes="0"/>
+                      <Component id="mailTF" max="32767" attributes="0"/>
+                      <Component id="adnoTF" alignment="0" pref="165" max="32767" attributes="0"/>
                   </Group>
-                  <Component id="nameTF" pref="165" max="32767" attributes="0"/>
-                  <Component id="rnoTF" max="32767" attributes="0"/>
-                  <Component id="dobTF" alignment="0" max="32767" attributes="0"/>
-                  <Component id="semTF" alignment="0" max="32767" attributes="0"/>
-                  <Component id="phoneTF" max="32767" attributes="0"/>
-                  <Component id="mailTF" max="32767" attributes="0"/>
-                  <Component id="adnoTF" alignment="0" pref="165" max="32767" attributes="0"/>
+                  <Component id="semCB" min="-2" pref="161" max="-2" attributes="0"/>
               </Group>
               <EmptySpace max="32767" attributes="0"/>
           </Group>
@@ -106,15 +108,14 @@
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="1" attributes="0">
                   <Group type="102" attributes="0">
-                      <Component id="jLabel6" min="-2" pref="25" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="jLabel6" alignment="3" min="-2" pref="25" max="-2" attributes="0"/>
+                          <Component id="semCB" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="jLabel7" min="-2" pref="25" max="-2" attributes="0"/>
                   </Group>
-                  <Group type="102" attributes="0">
-                      <Component id="semTF" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                      <Component id="dobTF" min="-2" max="-2" attributes="0"/>
-                  </Group>
+                  <Component id="dobTF" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
@@ -211,24 +212,31 @@
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="mailTF">
+      <Events>
+        <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="mailTFKeyPressed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JTextField" name="phoneTF">
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="phoneTFActionPerformed"/>
+        <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="phoneTFKeyPressed"/>
       </Events>
     </Component>
-    <Component class="javax.swing.JTextField" name="semTF">
-    </Component>
     <Component class="javax.swing.JTextField" name="dobTF">
+      <Events>
+        <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="dobTFKeyPressed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JTextField" name="nameTF">
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="nameTFActionPerformed"/>
+        <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="nameTFKeyPressed"/>
       </Events>
     </Component>
     <Component class="javax.swing.JTextField" name="rnoTF">
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="rnoTFActionPerformed"/>
+        <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="rnoTFKeyPressed"/>
       </Events>
     </Component>
     <Component class="javax.swing.JRadioButton" name="maleRB">
@@ -312,7 +320,22 @@
     <Component class="javax.swing.JTextField" name="adnoTF">
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="adnoTFActionPerformed"/>
+        <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="adnoTFKeyPressed"/>
       </Events>
+    </Component>
+    <Component class="javax.swing.JComboBox" name="semCB">
+      <Properties>
+        <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
+          <StringArray count="0"/>
+        </Property>
+        <Property name="toolTipText" type="java.lang.String" value=""/>
+        <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+          <Color id="Hand Cursor"/>
+        </Property>
+      </Properties>
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
+      </AuxValues>
     </Component>
   </SubComponents>
 </Form>

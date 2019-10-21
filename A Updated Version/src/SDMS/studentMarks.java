@@ -5,25 +5,25 @@
  */
 package SDMS;
 
+import java.awt.HeadlessException;
 import java.sql.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.text.DecimalFormat;
 import javax.swing.JOptionPane;
 
 public class studentMarks extends javax.swing.JFrame {
-
+    
     public static final String JDBC_DRIVER = "org.h2.Driver";
     public static final String DB_URL = "jdbc:h2:~/SDMS";
     public static final String DB_USERNAME = "root";
     public static final String DB_PASSWORD = "";
     String adno;
-
+    
     public studentMarks() {
         initComponents();
-        adno = "344";
+        adno = "17015";
         startup();
     }
-
+    
     public studentMarks(String number) {
         initComponents();
         adno = number;
@@ -51,7 +51,7 @@ public class studentMarks extends javax.swing.JFrame {
         lab2TF = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
         jLabel13 = new javax.swing.JLabel();
-        lab3TF = new javax.swing.JTextField();
+        cgpaTF = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
         nameTF = new javax.swing.JTextField();
         jLabel7 = new javax.swing.JLabel();
@@ -105,7 +105,7 @@ public class studentMarks extends javax.swing.JFrame {
         jLabel8.setText("Subject 4 :");
 
         jLabel9.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jLabel9.setText("Lab 3 :");
+        jLabel9.setText("CGPA :");
 
         jLabel10.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel10.setText("Lab 2 :");
@@ -179,7 +179,7 @@ public class studentMarks extends javax.swing.JFrame {
                             .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(34, 34, 34)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lab3TF)
+                            .addComponent(cgpaTF)
                             .addComponent(lab2TF)
                             .addComponent(lab1TF)
                             .addComponent(sub6TF)
@@ -259,7 +259,7 @@ public class studentMarks extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lab3TF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(cgpaTF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(cancelB)
@@ -301,23 +301,23 @@ public class studentMarks extends javax.swing.JFrame {
     private void submitBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_submitBActionPerformed
         submit();
     }//GEN-LAST:event_submitBActionPerformed
-
+    
     private void cancelBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelBActionPerformed
         this.dispose();
     }//GEN-LAST:event_cancelBActionPerformed
-
+    
     private void semCBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_semCBActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_semCBActionPerformed
-
+    
     private void markSearchBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_markSearchBActionPerformed
         markSearch();
     }//GEN-LAST:event_markSearchBActionPerformed
-
+    
     private void markSearchBMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_markSearchBMouseClicked
         markSearch();
     }//GEN-LAST:event_markSearchBMouseClicked
-
+    
     private void adnoCBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_adnoCBActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_adnoCBActionPerformed
@@ -358,15 +358,21 @@ public class studentMarks extends javax.swing.JFrame {
             new studentMarks().setVisible(true);
         });
     }
-
+    
     private void submit() {
         if (semCB.getSelectedIndex() == -1) {
-            JOptionPane.showMessageDialog(this, "Semester not selected");
+            JOptionPane.showMessageDialog(this, "Semester not selected", "Error", JOptionPane.OK_OPTION);
         } else if (sub1TF.getText().equals("") || sub2TF.getText().equals("") || sub3TF.getText().equals("")
                 || sub4TF.getText().equals("") || sub5TF.getText().equals("") || sub6TF.getText().equals("")
-                || lab1TF.getText().equals("") || lab2TF.getText().equals("") || lab2TF.getText().equals("")) {
-            JOptionPane.showMessageDialog(this, "Fields cannot be empty");
-        } else {
+                || lab1TF.getText().equals("") || lab2TF.getText().equals("")) {
+            JOptionPane.showMessageDialog(this, "Fields cannot be empty", "Error", JOptionPane.OK_OPTION);
+        } else if (Integer.valueOf(sub1TF.getText()) > 100 || Integer.valueOf(sub2TF.getText()) > 100
+                || Integer.valueOf(sub3TF.getText()) > 100 || Integer.valueOf(sub4TF.getText()) > 100
+                || Integer.valueOf(sub5TF.getText()) > 100 || Integer.valueOf(sub6TF.getText()) > 100
+                || Integer.valueOf(lab1TF.getText()) > 100 || Integer.valueOf(lab2TF.getText()) > 100) {
+            JOptionPane.showMessageDialog(this, "Marks cannot be greater than 100", "Invalid Mark", JOptionPane.OK_OPTION);
+        } else if (JOptionPane.showConfirmDialog(this, "Marks cannot be edited after submission."
+                + "Continue?", "Submit Mark", JOptionPane.YES_NO_OPTION) == 0) {
             try {
                 Class.forName(JDBC_DRIVER);
                 Connection con = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD);
@@ -382,16 +388,17 @@ public class studentMarks extends javax.swing.JFrame {
                 pst.setString(8, sub6TF.getText());
                 pst.setString(9, lab1TF.getText());
                 pst.setString(10, lab2TF.getText());
-                pst.setString(11, lab3TF.getText());
+                pst.setString(11, String.valueOf(CGPA()));
                 pst.executeUpdate();
                 con.close();
-                JOptionPane.showConfirmDialog(this, "Success");
+                JOptionPane.showMessageDialog(this, "Success");
+                markSearch();
             } catch (SQLException | ClassNotFoundException e) {
                 JOptionPane.showMessageDialog(this, e);
             }
         }
     }
-
+    
     private void insertSem() {
         semCB.removeAllItems();
         try {
@@ -400,9 +407,7 @@ public class studentMarks extends javax.swing.JFrame {
             PreparedStatement pst = con.prepareStatement(sql);
             pst.setString(1, String.valueOf(adnoTF.getText()));
             ResultSet rs = pst.executeQuery();
-            JOptionPane.showMessageDialog(this, "here");
             while (rs.next()) {
-                JOptionPane.showMessageDialog(this, rs.getInt(1));
                 int loopVar = 1;
                 while (loopVar < rs.getInt(1)) {
                     semCB.addItem(String.valueOf(loopVar));
@@ -412,31 +417,31 @@ public class studentMarks extends javax.swing.JFrame {
             }
             con.close();
             semCB.setSelectedIndex(-1);
-        } catch (Exception e) {
-            JOptionPane.showInputDialog(this, e);
+        } catch (HeadlessException | SQLException e) {
+            JOptionPane.showMessageDialog(this, e);
         }
     }
-
+    
     private void searchName() {
         try {
             Connection con = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD);
             String sql = "select name from student where adno=?";
             PreparedStatement pst = con.prepareStatement(sql);
             pst.setString(1, adno);
-            JOptionPane.showMessageDialog(this, "here" + adno);
             ResultSet rs = pst.executeQuery();
             while (rs.next()) {
                 nameTF.setText(rs.getString(1));
             }
             con.close();
         } catch (Exception e) {
-            JOptionPane.showInputDialog(this, e);
+            JOptionPane.showMessageDialog(this, e);
         }
         insertSem();
     }
-
+    
     private void markSearch() {
-
+        makeEditable();
+        clearField();
         try {
             Connection con = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD);
             String sql = "select * from mark where adno=? and sem = ?";
@@ -453,15 +458,15 @@ public class studentMarks extends javax.swing.JFrame {
                 sub6TF.setText(rs.getString(8));
                 lab1TF.setText(rs.getString(9));
                 lab2TF.setText(rs.getString(10));
-                lab3TF.setText(rs.getString(11));
+                cgpaTF.setText(rs.getString(11));
                 makeNonEditable();
             }
             con.close();
-        } catch (Exception e) {
-            JOptionPane.showInputDialog(this, e);
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this, e);
         }
     }
-
+    
     private void makeNonEditable() {
         sub1TF.setEditable(false);
         sub2TF.setEditable(false);
@@ -471,20 +476,44 @@ public class studentMarks extends javax.swing.JFrame {
         sub6TF.setEditable(false);
         lab1TF.setEditable(false);
         lab2TF.setEditable(false);
-        lab3TF.setEditable(false);
+        cgpaTF.setEditable(false);
         submitB.setVisible(false);
-
+        
     }
-
+    
     private void startup() {
         adnoTF.setText(adno);
         adnoTF.setEditable(false);
         searchName();
-        //nameTF.setEditable(false);
-
+        cgpaTF.setEditable(false);
+        nameTF.setEditable(false);
+        
     }
-
-    /*private void makeEditable() {
+    
+    private void clearField() {
+        sub1TF.setText(null);
+        sub2TF.setText(null);
+        sub3TF.setText(null);
+        sub4TF.setText(null);
+        sub5TF.setText(null);
+        sub6TF.setText(null);
+        lab1TF.setText(null);
+        lab2TF.setText(null);
+        cgpaTF.setText(null);
+    }
+    
+    private String CGPA() {
+        int totalMark = Integer.valueOf(sub1TF.getText()) + Integer.valueOf(sub2TF.getText())
+                + Integer.valueOf(sub3TF.getText()) + Integer.valueOf(sub4TF.getText())
+                + Integer.valueOf(sub5TF.getText()) + Integer.valueOf(sub6TF.getText())
+                + Integer.valueOf(lab1TF.getText()) + Integer.valueOf(lab2TF.getText());
+        float percentage = ((float) totalMark / 800) * 100;
+        float cgpa = (float) (percentage / 9.5);
+        DecimalFormat decimalFormat = new DecimalFormat("0.00");
+        return decimalFormat.format(cgpa);
+    }
+    
+    private void makeEditable() {
         sub1TF.setEditable(true);
         sub2TF.setEditable(true);
         sub3TF.setEditable(true);
@@ -493,14 +522,14 @@ public class studentMarks extends javax.swing.JFrame {
         sub6TF.setEditable(true);
         lab1TF.setEditable(true);
         lab2TF.setEditable(true);
-        lab3TF.setEditable(true);
         submitB.setVisible(true);
-    }*/
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox<String> adnoCB;
     private javax.swing.JTextField adnoTF;
     private javax.swing.JButton cancelB;
+    private javax.swing.JTextField cgpaTF;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -518,7 +547,6 @@ public class studentMarks extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JTextField lab1TF;
     private javax.swing.JTextField lab2TF;
-    private javax.swing.JTextField lab3TF;
     private javax.swing.JButton markSearchB;
     private javax.swing.JTextField nameTF;
     private javax.swing.JComboBox<String> semCB;

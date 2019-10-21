@@ -96,7 +96,7 @@
                               </Group>
                               <EmptySpace min="-2" pref="34" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="lab3TF" alignment="0" max="32767" attributes="0"/>
+                                  <Component id="cgpaTF" alignment="0" max="32767" attributes="0"/>
                                   <Component id="lab2TF" alignment="0" max="32767" attributes="0"/>
                                   <Component id="lab1TF" alignment="0" max="32767" attributes="0"/>
                                   <Component id="sub6TF" alignment="0" max="32767" attributes="0"/>
@@ -196,7 +196,7 @@
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="jLabel9" alignment="3" min="-2" pref="24" max="-2" attributes="0"/>
-                          <Component id="lab3TF" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="cgpaTF" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
@@ -257,7 +257,7 @@
                 <Property name="text" type="java.lang.String" value="Semester :"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JTextField" name="lab3TF">
+            <Component class="javax.swing.JTextField" name="cgpaTF">
             </Component>
             <Component class="javax.swing.JLabel" name="jLabel6">
               <Properties>
@@ -292,7 +292,7 @@
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Tahoma" size="12" style="1"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="Lab 3 :"/>
+                <Property name="text" type="java.lang.String" value="CGPA :"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JTextField" name="sub1TF">

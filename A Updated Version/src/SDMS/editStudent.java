@@ -6,6 +6,7 @@
 package SDMS;
 
 import java.awt.HeadlessException;
+import java.awt.event.KeyEvent;
 import java.sql.*;
 import javax.swing.JOptionPane;
 
@@ -20,23 +21,23 @@ public class editStudent extends javax.swing.JFrame {
     public static final String DB_USERNAME = "root";
     public static final String DB_PASSWORD = "";
     String adno;
+
     public editStudent() {
         initComponents();
         adno = "344";
         adnoTF.setText(adno);
         adnoTF.setEditable(false);
-        insertDept();
+        insertDeptandSem();
         insertData();
 
     }
-     public editStudent(String number) {
+
+    public editStudent(String number) {
         initComponents();
         adno = number;
-        adnoTF.setText(adno);
-        adnoTF.setEditable(false);
-        insertDept();
-        insertData();
+        startup();
     }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -58,7 +59,6 @@ public class editStudent extends javax.swing.JFrame {
         jLabel9 = new javax.swing.JLabel();
         mailTF = new javax.swing.JTextField();
         phoneTF = new javax.swing.JTextField();
-        semTF = new javax.swing.JTextField();
         dobTF = new javax.swing.JTextField();
         nameTF = new javax.swing.JTextField();
         rnoTF = new javax.swing.JTextField();
@@ -69,6 +69,7 @@ public class editStudent extends javax.swing.JFrame {
         cancelB = new javax.swing.JButton();
         deleteB = new javax.swing.JButton();
         adnoTF = new javax.swing.JTextField();
+        semCB = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
@@ -100,9 +101,26 @@ public class editStudent extends javax.swing.JFrame {
         jLabel9.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel9.setText("Phone Number:");
 
+        mailTF.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                mailTFKeyPressed(evt);
+            }
+        });
+
         phoneTF.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 phoneTFActionPerformed(evt);
+            }
+        });
+        phoneTF.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                phoneTFKeyPressed(evt);
+            }
+        });
+
+        dobTF.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                dobTFKeyPressed(evt);
             }
         });
 
@@ -111,10 +129,20 @@ public class editStudent extends javax.swing.JFrame {
                 nameTFActionPerformed(evt);
             }
         });
+        nameTF.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                nameTFKeyPressed(evt);
+            }
+        });
 
         rnoTF.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 rnoTFActionPerformed(evt);
+            }
+        });
+        rnoTF.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                rnoTFKeyPressed(evt);
             }
         });
 
@@ -161,6 +189,14 @@ public class editStudent extends javax.swing.JFrame {
                 adnoTFActionPerformed(evt);
             }
         });
+        adnoTF.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                adnoTFKeyPressed(evt);
+            }
+        });
+
+        semCB.setToolTipText("");
+        semCB.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -179,19 +215,20 @@ public class editStudent extends javax.swing.JFrame {
                     .addComponent(jLabel4)
                     .addComponent(jLabel5))
                 .addGap(70, 70, 70)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(deptCB, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(maleRB)
-                        .addGap(18, 18, 18)
-                        .addComponent(femaleRB))
-                    .addComponent(nameTF, javax.swing.GroupLayout.DEFAULT_SIZE, 165, Short.MAX_VALUE)
-                    .addComponent(rnoTF)
-                    .addComponent(dobTF)
-                    .addComponent(semTF)
-                    .addComponent(phoneTF)
-                    .addComponent(mailTF)
-                    .addComponent(adnoTF, javax.swing.GroupLayout.DEFAULT_SIZE, 165, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(deptCB, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(layout.createSequentialGroup()
+                            .addComponent(maleRB)
+                            .addGap(18, 18, 18)
+                            .addComponent(femaleRB))
+                        .addComponent(nameTF, javax.swing.GroupLayout.DEFAULT_SIZE, 165, Short.MAX_VALUE)
+                        .addComponent(rnoTF)
+                        .addComponent(dobTF)
+                        .addComponent(phoneTF)
+                        .addComponent(mailTF)
+                        .addComponent(adnoTF, javax.swing.GroupLayout.DEFAULT_SIZE, 165, Short.MAX_VALUE))
+                    .addComponent(semCB, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -232,13 +269,12 @@ public class editStudent extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(semCB, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(semTF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(dobTF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(dobTF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -260,11 +296,11 @@ public class editStudent extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void nameTFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nameTFActionPerformed
-        // TODO add your handling code here:
+      
     }//GEN-LAST:event_nameTFActionPerformed
 
     private void rnoTFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rnoTFActionPerformed
-        // TODO add your handling code here:
+        
     }//GEN-LAST:event_rnoTFActionPerformed
 
     private void updateBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateBActionPerformed
@@ -280,12 +316,46 @@ public class editStudent extends javax.swing.JFrame {
     }//GEN-LAST:event_deleteBActionPerformed
 
     private void phoneTFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_phoneTFActionPerformed
-        // TODO add your handling code here:
+        
     }//GEN-LAST:event_phoneTFActionPerformed
 
     private void adnoTFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_adnoTFActionPerformed
-        // TODO add your handling code here:
+        
     }//GEN-LAST:event_adnoTFActionPerformed
+
+    private void adnoTFKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_adnoTFKeyPressed
+
+    }//GEN-LAST:event_adnoTFKeyPressed
+
+    private void nameTFKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_nameTFKeyPressed
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            updateData();
+        }
+    }//GEN-LAST:event_nameTFKeyPressed
+
+    private void rnoTFKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_rnoTFKeyPressed
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            updateData();
+        }        
+    }//GEN-LAST:event_rnoTFKeyPressed
+
+    private void dobTFKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_dobTFKeyPressed
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            updateData();
+        }        
+    }//GEN-LAST:event_dobTFKeyPressed
+
+    private void mailTFKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_mailTFKeyPressed
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            updateData();
+        }        
+    }//GEN-LAST:event_mailTFKeyPressed
+
+    private void phoneTFKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_phoneTFKeyPressed
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            updateData();
+        }        
+    }//GEN-LAST:event_phoneTFKeyPressed
 
     /**
      * @param args the command line arguments
@@ -317,7 +387,8 @@ public class editStudent extends javax.swing.JFrame {
             new editStudent().setVisible(true);
         });
     }
-     private void deleteData() {
+
+    private void deleteData() {
         String username = (String) adno;
         try {
             Connection con = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD);
@@ -329,6 +400,14 @@ public class editStudent extends javax.swing.JFrame {
             pst = con.prepareStatement(sql);
             pst.setString(1, username);
             pst.executeUpdate();
+            sql = "delete from user where adno=?";
+            pst = con.prepareStatement(sql);
+            pst.setString(1, adno);
+            pst.executeUpdate();
+            sql = "delete from project where adno=?";
+            pst = con.prepareStatement(sql);
+            pst.setString(1, adno);
+            pst.executeUpdate();
             con.close();
             JOptionPane.showMessageDialog(this, "Deletion Successful");
         } catch (SQLException e) {
@@ -338,7 +417,7 @@ public class editStudent extends javax.swing.JFrame {
     }
 
     private void confirm(int opt) {
-        
+
         if (opt == 0 && JOptionPane.showConfirmDialog(this, "Delete this Student?", "", JOptionPane.YES_NO_OPTION) == 0) {
             deleteData();
             this.dispose();
@@ -363,8 +442,8 @@ public class editStudent extends javax.swing.JFrame {
                 } else {
                     femaleRB.setSelected(true);
                 }
-                deptCB.setSelectedIndex(deptChoosen(rs.getString(5)));
-                semTF.setText(String.valueOf(rs.getInt(6)));
+                deptCB.setSelectedItem(rs.getString(5));
+                semCB.setSelectedItem(String.valueOf(rs.getInt(6)));
                 dobTF.setText(String.valueOf(rs.getDate(7)));
                 mailTF.setText(rs.getString(8));
                 phoneTF.setText(rs.getString(9));
@@ -375,46 +454,25 @@ public class editStudent extends javax.swing.JFrame {
         }
     }
 
-    private int deptChoosen(String dept) {
-        switch (dept) {
-            case "CSE":
-                return 0;
-            case "EEE":
-                return 1;
-            case "ECE":
-                return 2;
-            case "IT":
-                return 3;
-            case "Mech":
-                return 4;
-            default:
-                return 5;
-        }
-    }
-
     private void updateData() {
         String date = dobTF.getText();
         String phone = phoneTF.getText();
         String name = nameTF.getText();
         String rno = rnoTF.getText();
-        String sem = semTF.getText();
         String mail = mailTF.getText();
         String username = adno;
         try {
-
-            if (name.equals("") || rno.equals("") || sem.equals("") || date.equals("")) //add date null condition
+            if (name.equals("") || rno.equals("") || date.equals("")) //add date null condition
             {
                 JOptionPane.showMessageDialog(this, "* field must have value");
-            } else if (!(adno.matches("[0-9]+"))) {
-
             } else if (!(name.matches("[A-Z]+[a-z]+[ ]+")) && name.length() < 3) {
 
             } else if (Integer.valueOf(rno) <= 0 && !(rno.matches("[[0-9]+"))) {
 
             } else if ((deptCB.getSelectedItem().toString().equals("   "))) {
                 JOptionPane.showMessageDialog(this, "Department not selectd");
-            } else if ((Integer.valueOf(sem) < 1 && Integer.valueOf(sem) > 8) && !(sem.matches("[0-9]+"))) {
-
+            } else if ((int) semCB.getSelectedIndex() == -1) {
+                JOptionPane.showMessageDialog(this, "Semester Not Selected");
             } else if ((!(mail.contains("@")) && !(mail.contains(".com"))) && !(mail.equals(""))) {
 
             } else if (!(phone.equals("")) && (phone.length() != 10)) {
@@ -439,7 +497,7 @@ public class editStudent extends javax.swing.JFrame {
                         pst.setString(4, "Female");
                     }
                     pst.setString(5, deptCB.getSelectedItem().toString());
-                    pst.setString(6, semTF.getText());
+                    pst.setString(6, semCB.getSelectedItem().toString());
                     pst.setString(7, dobTF.getText());
                     pst.setString(8, mailTF.getText());
                     pst.setString(9, phoneTF.getText());
@@ -465,7 +523,14 @@ public class editStudent extends javax.swing.JFrame {
         }
     }
 
-    private void insertDept() {
+    private void startup() {
+        adnoTF.setText(adno);
+        adnoTF.setEditable(false);
+        insertDeptandSem();
+        insertData();
+    }
+
+    private void insertDeptandSem() {
         deptCB.removeAllItems();
         try {
             Connection con = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD);
@@ -480,8 +545,10 @@ public class editStudent extends javax.swing.JFrame {
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(this, e);
         }
+        for (int loopVar = 1; loopVar < 9; loopVar += 1) {
+            semCB.addItem(String.valueOf(loopVar));
+        }
     }
-
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField adnoTF;
@@ -505,9 +572,8 @@ public class editStudent extends javax.swing.JFrame {
     private javax.swing.JTextField nameTF;
     private javax.swing.JTextField phoneTF;
     private javax.swing.JTextField rnoTF;
-    private javax.swing.JTextField semTF;
+    private javax.swing.JComboBox<String> semCB;
     private javax.swing.JButton updateB;
     // End of variables declaration//GEN-END:variables
 
-   
 }

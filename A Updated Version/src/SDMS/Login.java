@@ -24,7 +24,10 @@ public class Login extends javax.swing.JFrame {
     public static final String DB_URL = "jdbc:h2:~/SDMS";
     public static final String DB_USERNAME = "root";
     public static final String DB_PASSWORD = "";
-    private Connection connection;
+    private Connection con;
+    private ResultSet rs;
+    private PreparedStatement pst;
+    private String sql;
     public static final String Create_Table_User = "Create Table user ( username varchar(20) primary key,\n"
             + "password varchar(10))";
     public static final String Create_Table_Student = "create table student( adno int(6) primary key,\n"
@@ -53,7 +56,7 @@ public class Login extends javax.swing.JFrame {
             + "sub6 int default '0',\n"
             + "lab1 int default '0',\n"
             + "lab2 int default '0',\n"
-            + "lab3 int default '0',\n"
+            + "cgpa float default '0',\n"
             + "primary key (adno,sem));";
 
     public Login() {
@@ -67,18 +70,18 @@ public class Login extends javax.swing.JFrame {
     private void createTables() {
         try {
             Class.forName(JDBC_DRIVER);
-            connection = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD);
-            PreparedStatement pst = connection.prepareStatement(Create_Table_User);
+            con = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD);
+            pst = con.prepareStatement(Create_Table_User);
             pst.execute();
-            pst = connection.prepareStatement(Create_Table_Student);
+            pst = con.prepareStatement(Create_Table_Student);
             pst.execute();
-            pst = connection.prepareStatement(Create_Table_Project);
+            pst = con.prepareStatement(Create_Table_Project);
             pst.execute();
-            pst = connection.prepareStatement(Create_Table_Course);
+            pst = con.prepareStatement(Create_Table_Course);
             pst.execute();
-            pst = connection.prepareStatement(Create_Table_Mark);
+            pst = con.prepareStatement(Create_Table_Mark);
             pst.execute();
-            connection.close();
+            con.close();
         } catch (HeadlessException | ClassNotFoundException | SQLException e) {
             //JOptionPane.showMessageDialog(this, e);
         }
@@ -86,36 +89,32 @@ public class Login extends javax.swing.JFrame {
 
     private void updateBasicTableData() {
         try {
-            connection = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD);
-            String deptSql = "insert into course values ('" + "CSE" + "',"
+            con = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD);
+            sql = "insert into course values ('" + "CSE" + "',"
                     + "'" + "Computer Science" + "')";
-            PreparedStatement pst = connection.prepareStatement(deptSql);
+            pst = con.prepareStatement(sql);
             pst.execute();
-            deptSql = "insert into course values ('" + "EEE" + "',"
+            sql = "insert into course values ('" + "EEE" + "',"
                     + "'" + "Electrical and Electronics" + "')";
-            pst = connection.prepareStatement(deptSql);
+            pst = con.prepareStatement(sql);
             pst.execute();
-            deptSql = "insert into course values ('" + "ECE" + "',"
+            sql = "insert into course values ('" + "ECE" + "',"
                     + "'" + "Electronics and Communications" + "')";
-            pst = connection.prepareStatement(deptSql);
+            pst = con.prepareStatement(sql);
             pst.execute();
-            deptSql = "insert into course values ('" + "IT" + "',"
-                    + "'" + "" + "')";
-            pst = connection.prepareStatement(deptSql);
-            pst.execute();
-            deptSql = "insert into course values ('" + "" + "',"
+            sql = "insert into course values ('" + "IT" + "',"
                     + "'" + "Information Technology" + "')";
-            pst = connection.prepareStatement(deptSql);
+            pst = con.prepareStatement(sql);
             pst.execute();
-            deptSql = "insert into course values ('" + "Mech" + "',"
+            sql = "insert into course values ('" + "Mech" + "',"
                     + "'" + "Mechanical" + "')";
-            pst = connection.prepareStatement(deptSql);
+            pst = con.prepareStatement(sql);
             pst.execute();
             String adminData = "insert into user values ('" + "admin" + "',"
                     + "'" + "pass" + "')";
-            pst = connection.prepareStatement(adminData);
+            pst = con.prepareStatement(adminData);
             pst.execute();
-            connection.close();
+            con.close();
         } catch (SQLException e) {
             //JOptionPane.showMessageDialog(this, e);
         }
@@ -123,20 +122,20 @@ public class Login extends javax.swing.JFrame {
 
     private void emptyTables() {
         try {
-            connection = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD);
-            String deptSql = "delete from user";
-            PreparedStatement pst = connection.prepareStatement(deptSql);
+            con = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD);
+            sql = "delete from user";
+            pst = con.prepareStatement(sql);
             pst.execute();
-            deptSql = "delete from student";
-            pst = connection.prepareStatement(deptSql);
+            sql = "delete from student";
+            pst = con.prepareStatement(sql);
             pst.execute();
-            deptSql = "delete from project";
-            pst = connection.prepareStatement(deptSql);
+            sql = "delete from project";
+            pst = con.prepareStatement(sql);
             pst.execute();
-            deptSql = "delete from course";
-            pst = connection.prepareStatement(deptSql);
+            sql = "delete from course";
+            pst = con.prepareStatement(sql);
             pst.execute();
-            connection.close();
+            con.close();
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(this, e);
         }
@@ -144,20 +143,23 @@ public class Login extends javax.swing.JFrame {
 
     private void dropTables() {
         try {
-            connection = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD);
-            String deptSql = "drop table if exists user";
-            PreparedStatement pst = connection.prepareStatement(deptSql);
+            con = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD);
+            sql = "drop table if exists user";
+            pst = con.prepareStatement(sql);
             pst.execute();
-            deptSql = "drop table if exists student";
-            pst = connection.prepareStatement(deptSql);
+            sql = "drop table if exists student";
+            pst = con.prepareStatement(sql);
             pst.execute();
-            deptSql = "drop table if exists project";
-            pst = connection.prepareStatement(deptSql);
+            sql = "drop table if exists project";
+            pst = con.prepareStatement(sql);
             pst.execute();
-            deptSql = "drop table if exists course";
-            pst = connection.prepareStatement(deptSql);
+            sql = "drop table if exists course";
+            pst = con.prepareStatement(sql);
             pst.execute();
-            connection.close();
+            sql = "drop table if exists mark";
+            pst = con.prepareStatement(sql);
+            pst.execute();
+            con.close();
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(this, e);
 
@@ -497,17 +499,17 @@ public class Login extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Enter Password!!");
         } else {
             try {
-                Connection con = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD);
-                String sql = "select * from user where username=?";
-                PreparedStatement pst = con.prepareStatement(sql);
+                con = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD);
+                sql = "select * from user where username=?";
+                pst = con.prepareStatement(sql);
                 pst.setString(1, username);
-                ResultSet rs = pst.executeQuery();
+                rs = pst.executeQuery();
                 if (rs.next()) {
                     if (!rs.getString(2).equals(password)) {
                         JOptionPane.showMessageDialog(this, "Incorrect Password", "Error", JOptionPane.OK_OPTION);
                     } else if (username.equals("admin")) {
                         JOptionPane.showMessageDialog(this, "Login Success");
-                        studentData newpage = new studentData();
+                        adminHome newpage = new adminHome();
                         newpage.setVisible(true);
                         this.dispose();
                     } else {
