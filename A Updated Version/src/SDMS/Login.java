@@ -28,142 +28,9 @@ public class login extends javax.swing.JFrame {
     private ResultSet rs;
     private PreparedStatement pst;
     private String sql;
-    public static final String Create_Table_User = "Create Table user ( username varchar(20) primary key,\n"
-            + "password varchar(10))";
-    public static final String Create_Table_Student = "create table student( adno int(6) primary key,\n"
-            + "rollno int(2) not null,\n"
-            + "name varchar(10) not null,\n"
-            + "sex varchar(6) not null default 'Male',\n"
-            + "dept varchar(3) not null,\n"
-            + "sem int(1) not null check(sem>0),\n"
-            + "dob date,\n"
-            + "email varchar(25),\n"
-            + "phone varchar(10))";
-    public static final String Create_Table_Project = "create table project( adno int(6) primary key,\n"
-            + "sname varchar2(10) not null,\n"
-            + "pname varchar2(20) not null,\n"
-            + "approved varchar(3) default 'no',\n"
-            + "year int(4) not null default '2019')";
-    public static final String Create_Table_Course = "create table course(dept varchar(4) primary key,\n"
-            + "deptName varchar2(30) not null)";
-    public static final String Create_Table_Mark = "create table mark (adno int(6) not null,\n"
-            + "sem int(1) not null,\n"
-            + "sub1 int default '0',\n"
-            + "sub2 int default '0',\n"
-            + "sub3 int default '0',\n"
-            + "sub4 int default '0',\n"
-            + "sub5 int default '0',\n"
-            + "sub6 int default '0',\n"
-            + "lab1 int default '0',\n"
-            + "lab2 int default '0',\n"
-            + "cgpa float default '0',\n"
-            + "primary key (adno,sem));";
 
     public login() {
-        //dropTables();
-        createTables();
-        //emptyTables();
-        updateBasicTableData();
         initComponents();
-    }
-
-    private void createTables() {
-        try {
-            Class.forName(JDBC_DRIVER);
-            con = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD);
-            pst = con.prepareStatement(Create_Table_User);
-            pst.execute();
-            pst = con.prepareStatement(Create_Table_Student);
-            pst.execute();
-            pst = con.prepareStatement(Create_Table_Project);
-            pst.execute();
-            pst = con.prepareStatement(Create_Table_Course);
-            pst.execute();
-            pst = con.prepareStatement(Create_Table_Mark);
-            pst.execute();
-            con.close();
-        } catch (HeadlessException | ClassNotFoundException | SQLException e) {
-            //JOptionPane.showMessageDialog(this, e);
-        }
-    }
-
-    private void updateBasicTableData() {
-        try {
-            con = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD);
-            sql = "insert into course values ('" + "CSE" + "',"
-                    + "'" + "Computer Science" + "')";
-            pst = con.prepareStatement(sql);
-            pst.execute();
-            sql = "insert into course values ('" + "EEE" + "',"
-                    + "'" + "Electrical and Electronics" + "')";
-            pst = con.prepareStatement(sql);
-            pst.execute();
-            sql = "insert into course values ('" + "ECE" + "',"
-                    + "'" + "Electronics and Communications" + "')";
-            pst = con.prepareStatement(sql);
-            pst.execute();
-            sql = "insert into course values ('" + "IT" + "',"
-                    + "'" + "Information Technology" + "')";
-            pst = con.prepareStatement(sql);
-            pst.execute();
-            sql = "insert into course values ('" + "Mech" + "',"
-                    + "'" + "Mechanical" + "')";
-            pst = con.prepareStatement(sql);
-            pst.execute();
-            String adminData = "insert into user values ('" + "admin" + "',"
-                    + "'" + "pass" + "')";
-            pst = con.prepareStatement(adminData);
-            pst.execute();
-            con.close();
-        } catch (SQLException e) {
-            //JOptionPane.showMessageDialog(this, e);
-        }
-    }
-
-    private void emptyTables() {
-        try {
-            con = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD);
-            sql = "delete from user";
-            pst = con.prepareStatement(sql);
-            pst.execute();
-            sql = "delete from student";
-            pst = con.prepareStatement(sql);
-            pst.execute();
-            sql = "delete from project";
-            pst = con.prepareStatement(sql);
-            pst.execute();
-            sql = "delete from course";
-            pst = con.prepareStatement(sql);
-            pst.execute();
-            con.close();
-        } catch (SQLException e) {
-            JOptionPane.showMessageDialog(this, e);
-        }
-    }
-
-    private void dropTables() {
-        try {
-            con = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD);
-            sql = "drop table if exists user";
-            pst = con.prepareStatement(sql);
-            pst.execute();
-            sql = "drop table if exists student";
-            pst = con.prepareStatement(sql);
-            pst.execute();
-            sql = "drop table if exists project";
-            pst = con.prepareStatement(sql);
-            pst.execute();
-            sql = "drop table if exists course";
-            pst = con.prepareStatement(sql);
-            pst.execute();
-            sql = "drop table if exists mark";
-            pst = con.prepareStatement(sql);
-            pst.execute();
-            con.close();
-        } catch (SQLException e) {
-            JOptionPane.showMessageDialog(this, e);
-
-        }
     }
 
     /**
@@ -499,12 +366,11 @@ public class login extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Enter Username!!");
         } else if (password.equals("")) {
             JOptionPane.showMessageDialog(this, "Enter Password!!");
-        }else if (username.equals("master") && password.equals("master")){
+        } else if (username.equals("master") && password.equals("master")) {
             dataBase newpage = new dataBase();
             newpage.setVisible(true);
             this.dispose();
-        } 
-        else {
+        } else {
             try {
                 con = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD);
                 sql = "select * from user where username=?";
@@ -531,7 +397,7 @@ public class login extends javax.swing.JFrame {
                 }
                 con.close();
             } catch (HeadlessException | SQLException e) {
-                JOptionPane.showMessageDialog(this, e);
+                JOptionPane.showMessageDialog(this, "Contact the 'REAL' Admin and say\n 'DB not updated'");
             }
 
         }

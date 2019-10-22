@@ -11,19 +11,19 @@ import java.text.DecimalFormat;
 import javax.swing.JOptionPane;
 
 public class studentMarks extends javax.swing.JFrame {
-    
+
     public static final String JDBC_DRIVER = "org.h2.Driver";
     public static final String DB_URL = "jdbc:h2:~/SDMS";
     public static final String DB_USERNAME = "root";
     public static final String DB_PASSWORD = "";
     String adno;
-    
+
     public studentMarks() {
         initComponents();
         adno = "17015";
         startup();
     }
-    
+
     public studentMarks(String number) {
         initComponents();
         adno = number;
@@ -67,7 +67,6 @@ public class studentMarks extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         submitB = new javax.swing.JButton();
         cancelB = new javax.swing.JButton();
-        markSearchB = new javax.swing.JButton();
         semCB = new javax.swing.JComboBox<>();
         adnoTF = new javax.swing.JTextField();
 
@@ -137,19 +136,6 @@ public class studentMarks extends javax.swing.JFrame {
             }
         });
 
-        markSearchB.setText("S");
-        markSearchB.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        markSearchB.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                markSearchBMouseClicked(evt);
-            }
-        });
-        markSearchB.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                markSearchBActionPerformed(evt);
-            }
-        });
-
         semCB.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 semCBActionPerformed(evt);
@@ -196,9 +182,7 @@ public class studentMarks extends javax.swing.JFrame {
                         .addComponent(submitB)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(cancelB)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(markSearchB)
-                .addContainerGap())
+                .addGap(55, 55, 55))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -222,7 +206,6 @@ public class studentMarks extends javax.swing.JFrame {
                 .addGap(1, 1, 1)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(markSearchB, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(semCB, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -271,7 +254,9 @@ public class studentMarks extends javax.swing.JFrame {
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 343, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -301,23 +286,15 @@ public class studentMarks extends javax.swing.JFrame {
     private void submitBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_submitBActionPerformed
         submit();
     }//GEN-LAST:event_submitBActionPerformed
-    
+
     private void cancelBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelBActionPerformed
         this.dispose();
     }//GEN-LAST:event_cancelBActionPerformed
-    
+
     private void semCBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_semCBActionPerformed
-        // TODO add your handling code here:
+        markSearch();
     }//GEN-LAST:event_semCBActionPerformed
-    
-    private void markSearchBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_markSearchBActionPerformed
-        markSearch();
-    }//GEN-LAST:event_markSearchBActionPerformed
-    
-    private void markSearchBMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_markSearchBMouseClicked
-        markSearch();
-    }//GEN-LAST:event_markSearchBMouseClicked
-    
+
     private void adnoCBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_adnoCBActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_adnoCBActionPerformed
@@ -358,7 +335,7 @@ public class studentMarks extends javax.swing.JFrame {
             new studentMarks().setVisible(true);
         });
     }
-    
+
     private void submit() {
         if (semCB.getSelectedIndex() == -1) {
             JOptionPane.showMessageDialog(this, "Semester not selected", "Error", JOptionPane.OK_OPTION);
@@ -398,7 +375,7 @@ public class studentMarks extends javax.swing.JFrame {
             }
         }
     }
-    
+
     private void insertSem() {
         semCB.removeAllItems();
         try {
@@ -421,7 +398,7 @@ public class studentMarks extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, e);
         }
     }
-    
+
     private void searchName() {
         try {
             Connection con = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD);
@@ -438,7 +415,7 @@ public class studentMarks extends javax.swing.JFrame {
         }
         insertSem();
     }
-    
+
     private void markSearch() {
         makeEditable();
         clearField();
@@ -466,7 +443,7 @@ public class studentMarks extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, e);
         }
     }
-    
+
     private void makeNonEditable() {
         sub1TF.setEditable(false);
         sub2TF.setEditable(false);
@@ -478,18 +455,18 @@ public class studentMarks extends javax.swing.JFrame {
         lab2TF.setEditable(false);
         cgpaTF.setEditable(false);
         submitB.setVisible(false);
-        
+
     }
-    
+
     private void startup() {
         adnoTF.setText(adno);
         adnoTF.setEditable(false);
         searchName();
         cgpaTF.setEditable(false);
         nameTF.setEditable(false);
-        
+
     }
-    
+
     private void clearField() {
         sub1TF.setText(null);
         sub2TF.setText(null);
@@ -501,7 +478,7 @@ public class studentMarks extends javax.swing.JFrame {
         lab2TF.setText(null);
         cgpaTF.setText(null);
     }
-    
+
     private String CGPA() {
         int totalMark = Integer.valueOf(sub1TF.getText()) + Integer.valueOf(sub2TF.getText())
                 + Integer.valueOf(sub3TF.getText()) + Integer.valueOf(sub4TF.getText())
@@ -512,7 +489,7 @@ public class studentMarks extends javax.swing.JFrame {
         DecimalFormat decimalFormat = new DecimalFormat("0.00");
         return decimalFormat.format(cgpa);
     }
-    
+
     private void makeEditable() {
         sub1TF.setEditable(true);
         sub2TF.setEditable(true);
@@ -547,7 +524,6 @@ public class studentMarks extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JTextField lab1TF;
     private javax.swing.JTextField lab2TF;
-    private javax.swing.JButton markSearchB;
     private javax.swing.JTextField nameTF;
     private javax.swing.JComboBox<String> semCB;
     private javax.swing.JTextField sub1TF;
