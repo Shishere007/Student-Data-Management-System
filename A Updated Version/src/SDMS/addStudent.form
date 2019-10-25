@@ -64,10 +64,7 @@
                   <Component id="errorRNO" max="32767" attributes="0"/>
                   <Component id="errorPhone" alignment="1" max="32767" attributes="0"/>
                   <Group type="102" attributes="0">
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="errorMAIL" alignment="0" min="-2" pref="57" max="-2" attributes="0"/>
-                          <Component id="hintB" min="-2" max="-2" attributes="0"/>
-                      </Group>
+                      <Component id="errorMAIL" min="-2" pref="57" max="-2" attributes="0"/>
                       <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                   </Group>
               </Group>
@@ -137,7 +134,6 @@
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="jLabel7" alignment="3" min="-2" pref="25" max="-2" attributes="0"/>
                   <Component id="dobTF" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="hintB" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace type="unrelated" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" max="-2" attributes="0">
@@ -423,19 +419,6 @@
           <Color blue="33" green="0" red="ff" type="rgb"/>
         </Property>
       </Properties>
-    </Component>
-    <Component class="javax.swing.JButton" name="hintB">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="?"/>
-        <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
-          <Color id="Hand Cursor"/>
-        </Property>
-      </Properties>
-      <Events>
-        <EventHandler event="focusGained" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="hintBFocusGained"/>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="hintBActionPerformed"/>
-        <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="hintBKeyPressed"/>
-      </Events>
     </Component>
     <Component class="javax.swing.JComboBox" name="semCB">
       <Properties>
