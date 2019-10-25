@@ -23,7 +23,6 @@ public class editStudent extends javax.swing.JFrame {
     public static Connection con = null;
     public static String sql = null;
     public static PreparedStatement pst = null;
-    public static ResultSet rs = null;
     String adno;
 
     public editStudent() {
@@ -437,7 +436,7 @@ public class editStudent extends javax.swing.JFrame {
             sql = "select * from student where adno=?";
             pst = con.prepareStatement(sql);
             pst.setString(1, (String) adno);
-            rs = pst.executeQuery();
+            ResultSet rs = pst.executeQuery();
             if (rs.next()) {
                 rnoTF.setText(String.valueOf(rs.getInt(2)));
                 nameTF.setText(rs.getString(3));
@@ -540,7 +539,7 @@ public class editStudent extends javax.swing.JFrame {
             con = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD);
             sql = "select dept from course";
             pst = con.prepareStatement(sql);
-            rs = pst.executeQuery();
+            ResultSet rs = pst.executeQuery();
             while (rs.next()) {
                 deptCB.addItem(rs.getString(1));
             }

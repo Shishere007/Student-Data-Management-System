@@ -23,7 +23,6 @@ public class dataBase extends javax.swing.JFrame {
     public static Connection con = null;
     public static String sql = null;
     public static PreparedStatement pst = null;
-    public static ResultSet rs = null;
     public static final String Create_Table_User = "Create Table user ( username varchar(20) primary key,\n"
             + "password varchar(10))";
     public static final String Create_Table_Student = "create table student( adno int(6) primary key,\n"
@@ -73,6 +72,7 @@ public class dataBase extends javax.swing.JFrame {
         emptyTableL = new javax.swing.JLabel();
         updateSampleDataL = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
+        loginPage2B = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         dataBaseT = new javax.swing.JTable();
@@ -83,6 +83,7 @@ public class dataBase extends javax.swing.JFrame {
         projectB = new javax.swing.JButton();
         closeTabe2B = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
+        loginPageB = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
@@ -142,6 +143,14 @@ public class dataBase extends javax.swing.JFrame {
 
         jLabel2.setText("sample data update not configured");
 
+        loginPage2B.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        loginPage2B.setText("Login Page");
+        loginPage2B.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                loginPage2BActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -150,6 +159,8 @@ public class dataBase extends javax.swing.JFrame {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(loginPage2B)
+                        .addGap(18, 18, 18)
                         .addComponent(closeTabe1B))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -171,7 +182,9 @@ public class dataBase extends javax.swing.JFrame {
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(closeTabe1B)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(closeTabe1B)
+                    .addComponent(loginPage2B))
                 .addGap(78, 78, 78)
                 .addComponent(createTableL, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -249,6 +262,14 @@ public class dataBase extends javax.swing.JFrame {
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
         jLabel1.setText("Database");
 
+        loginPageB.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        loginPageB.setText("Login Page");
+        loginPageB.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                loginPageBActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -270,6 +291,8 @@ public class dataBase extends javax.swing.JFrame {
                 .addGap(262, 262, 262)
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(loginPageB)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(closeTabe2B)
                 .addContainerGap())
         );
@@ -278,7 +301,9 @@ public class dataBase extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(closeTabe2B)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(closeTabe2B)
+                        .addComponent(loginPageB))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(27, 27, 27)))
@@ -362,6 +387,18 @@ public class dataBase extends javax.swing.JFrame {
     private void updateSampleDataLMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_updateSampleDataLMouseClicked
         JOptionPane.showMessageDialog(this, "Feature not Updated");
     }//GEN-LAST:event_updateSampleDataLMouseClicked
+
+    private void loginPage2BActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginPage2BActionPerformed
+        login newpage = new login();
+        newpage.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_loginPage2BActionPerformed
+
+    private void loginPageBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginPageBActionPerformed
+        login newpage = new login();
+        newpage.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_loginPageBActionPerformed
 
     /**
      * @param args the command line arguments
@@ -505,7 +542,7 @@ public class dataBase extends javax.swing.JFrame {
             con = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD);
             sql = "select * from user";
             pst = con.prepareStatement(sql);
-            rs = pst.executeQuery();
+            ResultSet rs = pst.executeQuery();
             while (rs.next()) {
                 model.addRow(new Object[]{rs.getString(1), rs.getString(2)});
             }
@@ -534,7 +571,7 @@ public class dataBase extends javax.swing.JFrame {
             con = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD);
             sql = "select * from mark";
             pst = con.prepareStatement(sql);
-            rs = pst.executeQuery();
+            ResultSet rs = pst.executeQuery();
             while (rs.next()) {
                 model.addRow(new Object[]{rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4),
                     rs.getString(5), rs.getString(6), rs.getString(7), rs.getString(8), rs.getString(9), rs.getString(10), rs.getString(11)});
@@ -558,7 +595,7 @@ public class dataBase extends javax.swing.JFrame {
             con = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD);
             sql = "select * from project";
             pst = con.prepareStatement(sql);
-            rs = pst.executeQuery();
+            ResultSet rs = pst.executeQuery();
             while (rs.next()) {
                 model.addRow(new Object[]{rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5)});
             }
@@ -578,7 +615,7 @@ public class dataBase extends javax.swing.JFrame {
             con = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD);
             sql = "select * from course";
             pst = con.prepareStatement(sql);
-            rs = pst.executeQuery();
+            ResultSet rs = pst.executeQuery();
             while (rs.next()) {
                 model.addRow(new Object[]{rs.getString(1), rs.getString(2)});
             }
@@ -605,7 +642,7 @@ public class dataBase extends javax.swing.JFrame {
             con = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD);
             sql = "select * from student";
             pst = con.prepareStatement(sql);
-            rs = pst.executeQuery();
+            ResultSet rs = pst.executeQuery();
             while (rs.next()) {
                 model.addRow(new Object[]{rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4),
                     rs.getString(5), rs.getString(6), rs.getString(7), rs.getString(8), rs.getString(9)});
@@ -631,6 +668,8 @@ public class dataBase extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTabbedPane jTabbedPane3;
+    private javax.swing.JButton loginPage2B;
+    private javax.swing.JButton loginPageB;
     private javax.swing.JButton markB;
     private javax.swing.JButton projectB;
     private javax.swing.JButton studentB;

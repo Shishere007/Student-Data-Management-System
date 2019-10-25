@@ -6,6 +6,7 @@
 package SDMS;
 
 import java.awt.HeadlessException;
+import java.awt.event.KeyEvent;
 import java.sql.*;
 import java.text.DecimalFormat;
 import javax.swing.JOptionPane;
@@ -16,11 +17,14 @@ public class studentMarks extends javax.swing.JFrame {
     public static final String DB_URL = "jdbc:h2:~/SDMS";
     public static final String DB_USERNAME = "root";
     public static final String DB_PASSWORD = "";
+    private PreparedStatement pst;
+    private Connection con;
+    private String sql;
     String adno;
 
     public studentMarks() {
         initComponents();
-        adno = "17015";
+        adno = "2345";
         startup();
     }
 
@@ -87,6 +91,12 @@ public class studentMarks extends javax.swing.JFrame {
 
         jLabel4.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel4.setText("Subject 1 :");
+
+        lab2TF.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                lab2TFKeyPressed(evt);
+            }
+        });
 
         jLabel5.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel5.setText("Subject 2:");
@@ -299,6 +309,12 @@ public class studentMarks extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_adnoCBActionPerformed
 
+    private void lab2TFKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_lab2TFKeyPressed
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            submit();
+        }
+    }//GEN-LAST:event_lab2TFKeyPressed
+
     /**
      * @param args the command line arguments
      */
@@ -352,9 +368,9 @@ public class studentMarks extends javax.swing.JFrame {
                 + "Continue?", "Submit Mark", JOptionPane.YES_NO_OPTION) == 0) {
             try {
                 Class.forName(JDBC_DRIVER);
-                Connection con = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD);
-                String sql = "insert into mark values(?,?,?,?,?,?,?,?,?,?,?)";
-                PreparedStatement pst = con.prepareStatement(sql);
+                con = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD);
+                sql = "insert into mark values(?,?,?,?,?,?,?,?,?,?,?)";
+                pst = con.prepareStatement(sql);
                 pst.setString(1, String.valueOf(adno));
                 pst.setString(2, String.valueOf(semCB.getSelectedItem()));
                 pst.setString(3, sub1TF.getText());
@@ -379,9 +395,9 @@ public class studentMarks extends javax.swing.JFrame {
     private void insertSem() {
         semCB.removeAllItems();
         try {
-            Connection con = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD);
-            String sql = "select sem from student where adno=?";
-            PreparedStatement pst = con.prepareStatement(sql);
+            con = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD);
+            sql = "select sem from student where adno=?";
+            pst = con.prepareStatement(sql);
             pst.setString(1, String.valueOf(adnoTF.getText()));
             ResultSet rs = pst.executeQuery();
             while (rs.next()) {
@@ -401,16 +417,16 @@ public class studentMarks extends javax.swing.JFrame {
 
     private void searchName() {
         try {
-            Connection con = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD);
-            String sql = "select name from student where adno=?";
-            PreparedStatement pst = con.prepareStatement(sql);
+            con = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD);
+            sql = "select name from student where adno=?";
+            pst = con.prepareStatement(sql);
             pst.setString(1, adno);
             ResultSet rs = pst.executeQuery();
             while (rs.next()) {
                 nameTF.setText(rs.getString(1));
             }
             con.close();
-        } catch (Exception e) {
+        } catch (SQLException e) {
             JOptionPane.showMessageDialog(this, e);
         }
         insertSem();
@@ -420,9 +436,9 @@ public class studentMarks extends javax.swing.JFrame {
         makeEditable();
         clearField();
         try {
-            Connection con = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD);
-            String sql = "select * from mark where adno=? and sem = ?";
-            PreparedStatement pst = con.prepareStatement(sql);
+            con = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD);
+            sql = "select * from mark where adno=? and sem = ?";
+            pst = con.prepareStatement(sql);
             pst.setString(1, adno);
             pst.setString(2, (String) semCB.getSelectedItem());
             ResultSet rs = pst.executeQuery();
@@ -455,7 +471,6 @@ public class studentMarks extends javax.swing.JFrame {
         lab2TF.setEditable(false);
         cgpaTF.setEditable(false);
         submitB.setVisible(false);
-
     }
 
     private void startup() {

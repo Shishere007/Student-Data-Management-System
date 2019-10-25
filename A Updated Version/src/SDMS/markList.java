@@ -15,7 +15,7 @@ import javax.swing.table.TableRowSorter;
  * @author Suhaib K
  */
 public final class markList extends javax.swing.JFrame {
-    
+
     public static final String JDBC_DRIVER = "org.h2.Driver";
     public static final String DB_URL = "jdbc:h2:~/SDMS";
     public static final String DB_USERNAME = "root";
@@ -23,13 +23,12 @@ public final class markList extends javax.swing.JFrame {
     public static Connection con = null;
     public static String sql = null;
     public static PreparedStatement pst = null;
-    public static ResultSet rs = null;
-    
+
     public markList() {
         initComponents();
         markTableUpdate();
     }
-    
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -139,26 +138,26 @@ public final class markList extends javax.swing.JFrame {
     private void adnoTFKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_adnoTFKeyReleased
         tableSearchData();
     }//GEN-LAST:event_adnoTFKeyReleased
-    
+
     private void markTMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_markTMousePressed
         adnoTextFieldUpdate();
     }//GEN-LAST:event_markTMousePressed
-    
+
     private void refreshBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_refreshBActionPerformed
         adnoTF.setText(null);
         markTableUpdate();
     }//GEN-LAST:event_refreshBActionPerformed
-    
+
     private void closeBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_closeBActionPerformed
         this.dispose();
     }//GEN-LAST:event_closeBActionPerformed
-    
+
     private void editBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editBActionPerformed
         if (!adnoTF.getText().equals("")) {
             studentMarks newpage = new studentMarks(adnoTF.getText());
             newpage.setVisible(true);
-        }        
-        
+        }
+
     }//GEN-LAST:event_editBActionPerformed
 
     /**
@@ -190,7 +189,7 @@ public final class markList extends javax.swing.JFrame {
             new markList().setVisible(true);
         });
     }
-    
+
     public void markTableUpdate() {
         DefaultTableModel model = (DefaultTableModel) markT.getModel();
         model.setRowCount(0);
@@ -210,7 +209,7 @@ public final class markList extends javax.swing.JFrame {
             con = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD);
             sql = "select * from mark";
             pst = con.prepareStatement(sql);
-            rs = pst.executeQuery();
+            ResultSet rs = pst.executeQuery();
             while (rs.next()) {
                 model.addRow(new Object[]{rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4),
                     rs.getString(5), rs.getString(6), rs.getString(7), rs.getString(8), rs.getString(9), rs.getString(10), rs.getString(11)});
@@ -219,14 +218,14 @@ public final class markList extends javax.swing.JFrame {
         } catch (SQLException ex) {
             //Logger.getLogger(dataBase.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }    
-    
+    }
+
     private void adnoTextFieldUpdate() {
         DefaultTableModel model = (DefaultTableModel) markT.getModel();
         int tableSelectedRow = markT.getSelectedRow();
         adnoTF.setText(model.getValueAt(tableSelectedRow, 0).toString());
     }
-    
+
     private void tableSearchData() {
         DefaultTableModel model = (DefaultTableModel) markT.getModel();
         String search = adnoTF.getText();

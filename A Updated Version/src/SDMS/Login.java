@@ -25,7 +25,6 @@ public class login extends javax.swing.JFrame {
     public static final String DB_USERNAME = "root";
     public static final String DB_PASSWORD = "";
     private Connection con;
-    private ResultSet rs;
     private PreparedStatement pst;
     private String sql;
 
@@ -376,7 +375,7 @@ public class login extends javax.swing.JFrame {
                 sql = "select * from user where username=?";
                 pst = con.prepareStatement(sql);
                 pst.setString(1, username);
-                rs = pst.executeQuery();
+                ResultSet rs = pst.executeQuery();
                 if (rs.next()) {
                     if (!rs.getString(2).equals(password)) {
                         JOptionPane.showMessageDialog(this, "Incorrect Password", "Error", JOptionPane.OK_OPTION);
@@ -397,7 +396,7 @@ public class login extends javax.swing.JFrame {
                 }
                 con.close();
             } catch (HeadlessException | SQLException e) {
-                JOptionPane.showMessageDialog(this, "Contact the 'REAL' Admin and say\n 'DB not updated'");
+                JOptionPane.showMessageDialog(this, "DB not updated'");
             }
 
         }

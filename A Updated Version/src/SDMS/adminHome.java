@@ -20,7 +20,6 @@ public final class adminHome extends javax.swing.JFrame {
     public static Connection con = null;
     public static String sql = null;
     public static PreparedStatement pst = null;
-    public static ResultSet rs = null;
 
     public adminHome() {
         initComponents();
@@ -373,13 +372,8 @@ public final class adminHome extends javax.swing.JFrame {
     }//GEN-LAST:event_editStudentBActionPerformed
 
     private void projectBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_projectBActionPerformed
-        if (adnoTF.getText().equals("")) {
-            projectDetails newpage = new projectDetails();
-            newpage.setVisible(true);
-        } else {
-            markList newpage = new markList();
-            newpage.setVisible(true);
-        }
+        projectDetails newpage = new projectDetails();
+        newpage.setVisible(true);
     }//GEN-LAST:event_projectBActionPerformed
 
     private void projectBMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_projectBMouseClicked
@@ -504,7 +498,8 @@ public final class adminHome extends javax.swing.JFrame {
 
     public void markList() {
         if (adnoTF.getText().isBlank()) {
-            JOptionPane.showMessageDialog(this, "Feature not updated");
+            markList newpage = new markList();
+            newpage.setVisible(true);
         } else {
             studentMarks newpage = new studentMarks(adnoTF.getText());
             newpage.setVisible(true);
@@ -559,7 +554,7 @@ public final class adminHome extends javax.swing.JFrame {
                     con = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD);
                     sql = "select * from course";
                     pst = con.prepareStatement(sql);
-                    rs = pst.executeQuery();
+                    ResultSet rs = pst.executeQuery();
                     while (rs.next()) {
                         filterBy2B.addItem(rs.getString(1));
                     }
@@ -600,7 +595,7 @@ public final class adminHome extends javax.swing.JFrame {
                     pst = con.prepareStatement(sql);
                     pst.setString(1, filterBy2B.getSelectedItem().toString());
                     pst.setString(2, filterBy3B.getSelectedItem().toString());
-                    rs = pst.executeQuery();
+                    ResultSet rs = pst.executeQuery();
                     while (rs.next()) {
                         model.addRow(new Object[]{rs.getString(1), rs.getString(3), rs.getString(4),
                             rs.getString(5), rs.getString(6), rs.getString(7)});
@@ -644,7 +639,7 @@ public final class adminHome extends javax.swing.JFrame {
             con = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD);
             sql = "select * from student order by adno";
             pst = con.prepareStatement(sql);
-            rs = pst.executeQuery();
+            ResultSet rs = pst.executeQuery();
             while (rs.next()) {
                 model.addRow(new Object[]{rs.getString(1), rs.getString(3), rs.getString(4),
                     rs.getString(5), rs.getString(6), rs.getString(7)});
