@@ -18,6 +18,7 @@ public class studentHome extends javax.swing.JFrame {
     private Connection con;
     private PreparedStatement pst;
     private String sql;
+    private String sem;
     String adno;
 
     public studentHome() {
@@ -83,6 +84,7 @@ public class studentHome extends javax.swing.JFrame {
         lab1TF = new javax.swing.JTextField();
         sub6TF = new javax.swing.JTextField();
         lab2TF = new javax.swing.JTextField();
+        downloadB = new javax.swing.JButton();
         projectDetailsP = new javax.swing.JPanel();
         projectWarningL = new javax.swing.JLabel();
         projectRejectedL = new javax.swing.JLabel();
@@ -361,6 +363,14 @@ public class studentHome extends javax.swing.JFrame {
 
         lab2TF.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
 
+        downloadB.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        downloadB.setText("Download");
+        downloadB.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                downloadBActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout markListPLayout = new javax.swing.GroupLayout(markListP);
         markListP.setLayout(markListPLayout);
         markListPLayout.setHorizontalGroup(
@@ -368,7 +378,6 @@ public class studentHome extends javax.swing.JFrame {
             .addGroup(markListPLayout.createSequentialGroup()
                 .addGap(31, 31, 31)
                 .addGroup(markListPLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(semCB, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(markListPLayout.createSequentialGroup()
                         .addGroup(markListPLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel10)
@@ -405,14 +414,24 @@ public class studentHome extends javax.swing.JFrame {
                                 .addGap(33, 33, 33)
                                 .addGroup(markListPLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(sub2TF, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(sub4TF, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE))))))
-                .addContainerGap(59, Short.MAX_VALUE))
+                                    .addComponent(sub4TF, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addContainerGap(59, Short.MAX_VALUE))
+                    .addGroup(markListPLayout.createSequentialGroup()
+                        .addComponent(semCB, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(downloadB)
+                        .addGap(51, 51, 51))))
         );
         markListPLayout.setVerticalGroup(
             markListPLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(markListPLayout.createSequentialGroup()
-                .addGap(41, 41, 41)
-                .addComponent(semCB, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(markListPLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(markListPLayout.createSequentialGroup()
+                        .addGap(41, 41, 41)
+                        .addComponent(semCB, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(markListPLayout.createSequentialGroup()
+                        .addGap(21, 21, 21)
+                        .addComponent(downloadB)))
                 .addGap(28, 28, 28)
                 .addGroup(markListPLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -648,6 +667,11 @@ public class studentHome extends javax.swing.JFrame {
 
     private void semCBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_semCBActionPerformed
         insertMark();
+        if (sub1TF.getText().equals("")) {
+            downloadB.setVisible(false);
+        } else {
+            downloadB.setVisible(true);
+        }
     }//GEN-LAST:event_semCBActionPerformed
 
     private void lab1TFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_lab1TFActionPerformed
@@ -663,6 +687,10 @@ public class studentHome extends javax.swing.JFrame {
     private void updateBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateBActionPerformed
         updateProject();
     }//GEN-LAST:event_updateBActionPerformed
+
+    private void downloadBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_downloadBActionPerformed
+        downloadMarkList();
+    }//GEN-LAST:event_downloadBActionPerformed
 
     public static void main(String args[]) {
         try {
@@ -683,10 +711,16 @@ public class studentHome extends javax.swing.JFrame {
     private void startup() {
         insertData();
         insertSem();
+        downloadB.setVisible(false);
         disableEditorStudentDetailsPanel();
         projectDetailsPanelUpdate();
         projectListTableP.setVisible(false);
 
+    }
+
+    private void downloadMarkList() {
+        printStudentMark newpage = new printStudentMark(adno, semCB.getSelectedItem().toString());
+        newpage.setVisible(true);
     }
 
     private void exitprogram() {
@@ -716,6 +750,7 @@ public class studentHome extends javax.swing.JFrame {
                 }
                 deptTF.setText(String.valueOf((rs.getString(5))));
                 semTF.setText(String.valueOf(rs.getInt(6)));
+                sem = String.valueOf(rs.getInt(6));
                 dobTF.setText(String.valueOf(rs.getDate(7)));
                 mailTF.setText(rs.getString(8));
                 phoneTF.setText(rs.getString(9));
@@ -753,7 +788,20 @@ public class studentHome extends javax.swing.JFrame {
         cgpaTF.setEditable(false);
     }
 
+    private void clearField() {
+        sub1TF.setText(null);
+        sub2TF.setText(null);
+        sub3TF.setText(null);
+        sub4TF.setText(null);
+        sub5TF.setText(null);
+        sub6TF.setText(null);
+        lab1TF.setText(null);
+        lab2TF.setText(null);
+        cgpaTF.setText(null);
+    }
+
     private void insertMark() {
+        clearField();
         try {
             con = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD);
             sql = "select * from mark where adno=? and sem = ?";
@@ -799,7 +847,7 @@ public class studentHome extends javax.swing.JFrame {
         } catch (HeadlessException | SQLException e) {
             JOptionPane.showMessageDialog(this, e);
         }
-        semCB.setSelectedIndex(0);
+        semCB.setSelectedIndex(-1);
     }
 
     private void projectDetailsPanelUpdate() {
@@ -896,6 +944,7 @@ public class studentHome extends javax.swing.JFrame {
     private javax.swing.JButton changePasswordB;
     private javax.swing.JTextField deptTF;
     private javax.swing.JTextField dobTF;
+    private javax.swing.JButton downloadB;
     private javax.swing.JButton exitB;
     private javax.swing.JRadioButton femaleRB;
     private javax.swing.ButtonGroup genderBG;

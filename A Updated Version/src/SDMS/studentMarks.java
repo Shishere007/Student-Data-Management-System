@@ -63,6 +63,7 @@ public class studentMarks extends javax.swing.JFrame {
         cancelB = new javax.swing.JButton();
         semCB = new javax.swing.JComboBox<>();
         adnoTF = new javax.swing.JTextField();
+        printB = new javax.swing.JButton();
 
         adnoCB.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -142,6 +143,15 @@ public class studentMarks extends javax.swing.JFrame {
             }
         });
 
+        printB.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        printB.setText("Print");
+        printB.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        printB.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                printBActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -168,20 +178,23 @@ public class studentMarks extends javax.swing.JFrame {
                             .addComponent(cgpaTF)
                             .addComponent(lab2TF)
                             .addComponent(lab1TF)
-                            .addComponent(sub6TF)
                             .addComponent(sub5TF)
                             .addComponent(sub4TF)
                             .addComponent(nameTF)
                             .addComponent(sub1TF)
                             .addComponent(sub2TF)
                             .addComponent(sub3TF)
-                            .addComponent(semCB, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(adnoTF)))
+                            .addComponent(semCB, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(adnoTF)
+                            .addComponent(sub6TF)))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(161, 161, 161)
+                        .addGap(92, 92, 92)
+                        .addComponent(printB)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(submitB)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(cancelB)))
+                        .addComponent(cancelB)
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addGap(55, 55, 55))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
@@ -246,7 +259,8 @@ public class studentMarks extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(cancelB)
-                    .addComponent(submitB))
+                    .addComponent(submitB)
+                    .addComponent(printB))
                 .addContainerGap(17, Short.MAX_VALUE))
         );
 
@@ -293,6 +307,11 @@ public class studentMarks extends javax.swing.JFrame {
 
     private void semCBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_semCBActionPerformed
         markSearch();
+        if (sub1TF.getText().equals("")) {
+            printB.setVisible(false);
+        } else {
+            printB.setVisible(true);
+        }
     }//GEN-LAST:event_semCBActionPerformed
 
     private void adnoCBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_adnoCBActionPerformed
@@ -304,6 +323,10 @@ public class studentMarks extends javax.swing.JFrame {
             submit();
         }
     }//GEN-LAST:event_lab2TFKeyPressed
+
+    private void printBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_printBActionPerformed
+        printMarkList();
+    }//GEN-LAST:event_printBActionPerformed
     public static void main(String args[]) {
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
@@ -318,6 +341,11 @@ public class studentMarks extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(() -> {
             new studentMarks().setVisible(true);
         });
+    }
+
+    private void printMarkList() {
+        printStudentMark newpage = new printStudentMark(adno, semCB.getSelectedItem().toString());
+        newpage.setVisible(true);
     }
 
     private void submit() {
@@ -508,6 +536,7 @@ public class studentMarks extends javax.swing.JFrame {
     private javax.swing.JTextField lab1TF;
     private javax.swing.JTextField lab2TF;
     private javax.swing.JTextField nameTF;
+    private javax.swing.JButton printB;
     private javax.swing.JComboBox<String> semCB;
     private javax.swing.JTextField sub1TF;
     private javax.swing.JTextField sub2TF;

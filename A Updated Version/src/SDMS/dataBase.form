@@ -264,7 +264,7 @@
                               <EmptySpace min="27" pref="27" max="-2" attributes="0"/>
                           </Group>
                       </Group>
-                      <EmptySpace pref="15" max="32767" attributes="0"/>
+                      <EmptySpace min="-2" pref="15" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="studentB" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="courseB" alignment="3" min="-2" max="-2" attributes="0"/>
