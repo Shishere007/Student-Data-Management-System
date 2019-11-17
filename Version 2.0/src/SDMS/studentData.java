@@ -378,7 +378,7 @@ public final class studentData extends javax.swing.JFrame {
     }//GEN-LAST:event_dataTMousePressed
 
     private void filterBy1BMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_filterBy1BMouseClicked
-        
+
     }//GEN-LAST:event_filterBy1BMouseClicked
 
     private void filterBy1BMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_filterBy1BMouseExited
@@ -390,7 +390,7 @@ public final class studentData extends javax.swing.JFrame {
     }//GEN-LAST:event_filterBy1BItemStateChanged
 
     private void filterBy1BMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_filterBy1BMouseReleased
-        
+
     }//GEN-LAST:event_filterBy1BMouseReleased
 
     private void filterBy1BActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_filterBy1BActionPerformed
@@ -400,7 +400,7 @@ public final class studentData extends javax.swing.JFrame {
     }//GEN-LAST:event_filterBy1BActionPerformed
 
     private void filterBy1BCaretPositionChanged(java.awt.event.InputMethodEvent evt) {//GEN-FIRST:event_filterBy1BCaretPositionChanged
-       
+
     }//GEN-LAST:event_filterBy1BCaretPositionChanged
 
     private void filterBy3BActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_filterBy3BActionPerformed
@@ -503,7 +503,7 @@ public final class studentData extends javax.swing.JFrame {
             case "Semester":
                 for (int loopVar = 1; loopVar < 9; loopVar += 1) {
                     filterBy2B.addItem(String.valueOf(loopVar));
-                } 
+                }
                 filterBy3B.setVisible(false);
                 break;
             default:

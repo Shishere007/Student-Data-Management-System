@@ -362,8 +362,11 @@ public final class adminHome extends javax.swing.JFrame {
     }//GEN-LAST:event_newStudentBActionPerformed
 
     private void editStudentBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editStudentBActionPerformed
-        editStudent newpage = new editStudent(adnoTF.getText());
-        newpage.setVisible(true);
+        if (!adnoTF.getText().equals("")){
+            editStudent newpage = new editStudent(adnoTF.getText());
+            newpage.setVisible(true);
+        }
+        
     }//GEN-LAST:event_editStudentBActionPerformed
 
     private void projectBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_projectBActionPerformed
@@ -543,6 +546,7 @@ public final class adminHome extends javax.swing.JFrame {
         filterBy2B.setEnabled(true);
         filterBy2B.removeAllItems();
         filterBy3B.removeAllItems();
+        filterBy3B.addItem("0");
         switch (filterBy1B.getSelectedItem().toString()) {
             case "Department":
                 try {
@@ -586,21 +590,33 @@ public final class adminHome extends javax.swing.JFrame {
             con = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD);
             switch (filterBy1B.getSelectedItem().toString()) {
                 case "Department":
-                    sql = "select * from student where dept = ? and sem = ?";
-                    pst = con.prepareStatement(sql);
-                    pst.setString(1, filterBy2B.getSelectedItem().toString());
-                    pst.setString(2, filterBy3B.getSelectedItem().toString());
-                    ResultSet rs = pst.executeQuery();
-                    while (rs.next()) {
-                        model.addRow(new Object[]{rs.getString(1), rs.getString(3), rs.getString(4),
-                            rs.getString(5), rs.getString(6), rs.getString(7)});
+                    if (filterBy3B.getSelectedItem().toString().equals("0")) {
+                        sql = "select * from student where dept = ?";
+                        pst = con.prepareStatement(sql);
+                        pst.setString(1, filterBy2B.getSelectedItem().toString());
+                        ResultSet rs = pst.executeQuery();
+                        while (rs.next()) {
+                            model.addRow(new Object[]{rs.getString(1), rs.getString(3), rs.getString(4),
+                                rs.getString(5), rs.getString(6), rs.getString(7)});
+                        }
+                    } else {
+                        sql = "select * from student where dept = ? and sem = ?";
+                        pst = con.prepareStatement(sql);
+                        pst.setString(1, filterBy2B.getSelectedItem().toString());
+                        pst.setString(2, filterBy3B.getSelectedItem().toString());
+                        ResultSet rs = pst.executeQuery();
+                        while (rs.next()) {
+                            model.addRow(new Object[]{rs.getString(1), rs.getString(3), rs.getString(4),
+                                rs.getString(5), rs.getString(6), rs.getString(7)});
+                        }
                     }
+
                     break;
                 case "Gender":
                     sql = "select * from student where sex = ? ";
                     pst = con.prepareStatement(sql);
                     pst.setString(1, filterBy2B.getSelectedItem().toString());
-                    rs = pst.executeQuery();
+                    ResultSet rs = pst.executeQuery();
                     while (rs.next()) {
                         model.addRow(new Object[]{rs.getString(1), rs.getString(3), rs.getString(4),
                             rs.getString(5), rs.getString(6), rs.getString(7)});

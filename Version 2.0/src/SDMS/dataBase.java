@@ -18,15 +18,15 @@ public class dataBase extends javax.swing.JFrame {
             + "password varchar(10))";
     public static final String Create_Table_Student = "create table student( adno int(6) primary key,\n"
             + "rollno int(2) not null,\n"
-            + "name varchar(10) not null,\n"
+            + "name varchar(25) not null,\n"
             + "sex varchar(6) not null default 'Male',\n"
-            + "dept varchar(3) not null,\n"
+            + "dept varchar(5) not null,\n"
             + "sem int(1) not null check(sem>0),\n"
             + "dob date,\n"
             + "email varchar(25),\n"
             + "phone varchar(10))";
     public static final String Create_Table_Project = "create table project( adno int(6) primary key,\n"
-            + "sname varchar2(10) not null,\n"
+            + "sname varchar2(25) not null,\n"
             + "pname varchar2(20) not null,\n"
             + "approved varchar(3) default 'no',\n"
             + "year int(4) not null default '2019')";
@@ -195,12 +195,6 @@ public class dataBase extends javax.swing.JFrame {
 
         dataBaseT.setModel(dataBaseT.getModel());
         jScrollPane1.setViewportView(dataBaseT);
-        if (dataBaseT.getColumnModel().getColumnCount() > 0) {
-            dataBaseT.getColumnModel().getColumn(0).setHeaderValue("Title 1");
-            dataBaseT.getColumnModel().getColumn(1).setHeaderValue("Title 2");
-            dataBaseT.getColumnModel().getColumn(2).setHeaderValue("Title 3");
-            dataBaseT.getColumnModel().getColumn(3).setHeaderValue("Title 4");
-        }
 
         studentB.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         studentB.setText("Student");

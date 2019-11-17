@@ -382,7 +382,7 @@ public class editStudent extends javax.swing.JFrame {
             pst = con.prepareStatement(sql);
             pst.setString(1, username);
             pst.executeUpdate();
-            sql = "delete from user where adno=?";
+            sql = "delete from mark where adno=?";
             pst = con.prepareStatement(sql);
             pst.setString(1, adno);
             pst.executeUpdate();
