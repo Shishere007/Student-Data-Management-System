@@ -403,7 +403,6 @@ public class dataBase extends javax.swing.JFrame {
 
     private void createTables() {
         try {
-            Class.forName(JDBC_DRIVER);
             con = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD);
             pst = con.prepareStatement(Create_Table_User);
             pst.execute();
