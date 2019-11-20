@@ -2,6 +2,8 @@ package SDMS;
 
 import java.awt.HeadlessException;
 import java.sql.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
@@ -416,9 +418,10 @@ public class dataBase extends javax.swing.JFrame {
             pst.execute();
             con.close();
             JOptionPane.showMessageDialog(this, "Tables created successfully");
-        } catch (HeadlessException | ClassNotFoundException | SQLException e) {
-            JOptionPane.showMessageDialog(this, "Tables Exists!!!");
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(this, ex);
         }
+        
     }
 
     private void updateBasicTableData() {

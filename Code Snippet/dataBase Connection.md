@@ -99,10 +99,10 @@ public void insertData(){
         pst.setString(5,dept);
         pst.setString(6,dob);
         pst.executeUpdate();
+        con.close();
     }catch(Exception e){
         JOptionPane.showMessageDialog(this, e);
     }
-    con.close();
 }
 ```
 #
@@ -125,10 +125,10 @@ public void showTableData(){
             String sex = rs.getString(4);
             String dept = rs.getString(5);
             String dob = rs.getString(6);
+            con.close();
         }catch(Exception e){
-        JOptionPane.showMessageDialog(this, e);
-    }
-    con.close();
+            JOptionPane.showMessageDialog(this, e);
+        }
     }
 }
 ```
@@ -145,10 +145,10 @@ state 1 : You provide no data and recieve no data while execution
         String sql = "{sql commands}";
         pst = con.prepareStatement(sql);
         pst.execute();
+        con.close();
     }catch(Exception e){
         JOptionPane.showMessageDialog(this, e);
     }
-    con.close();
 
 ```
 state 2 : you provide no data but recieve data after execution
@@ -163,11 +163,12 @@ state 2 : you provide no data but recieve data after execution
             // program will only execute these code within while if there is a row
             // accessing row by row by using the following command
             var = rs.getString({column number)
+        con.close();
         }
     }catch(Exception e){
         JOptionPane.showMessageDialog(this, e);
     }
-    con.close();
+    
 ```
 
 state 3 : you provide data while execution but recieve nothing
@@ -183,10 +184,10 @@ state 3 : you provide data while execution but recieve nothing
         .
         .
         pst.execute();
+        con.close();
     }catch(Exception e){
         JOptionPane.showMessageDialog(this, e);
     }
-    con.close();
 ```
 
 state 4 : you provide data and also recieve data after execution
@@ -207,9 +208,9 @@ state 4 : you provide data and also recieve data after execution
             // accessing row by row by using the following command
             var = rs.getString({column number)
         }
+        con.close();
     }catch(Exception e){
         JOptionPane.showMessageDialog(this, e);
     }
-    con.close();
 ```
 
