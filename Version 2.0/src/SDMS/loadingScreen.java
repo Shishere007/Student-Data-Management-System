@@ -106,7 +106,7 @@ public class loadingScreen extends javax.swing.JFrame {
                 load.loadingNumL.setText(Integer.toString(i) + "%");
                 load.loadingPB.setValue(i);
             }
-            login newpage = new login();
+            Login newpage = new Login();
             newpage.setVisible(true);
             load.dispose();
         } catch (InterruptedException e) {

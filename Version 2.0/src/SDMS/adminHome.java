@@ -362,11 +362,11 @@ public final class adminHome extends javax.swing.JFrame {
     }//GEN-LAST:event_newStudentBActionPerformed
 
     private void editStudentBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editStudentBActionPerformed
-        if (!adnoTF.getText().equals("")){
+        if (!adnoTF.getText().equals("")) {
             editStudent newpage = new editStudent(adnoTF.getText());
             newpage.setVisible(true);
         }
-        
+
     }//GEN-LAST:event_editStudentBActionPerformed
 
     private void projectBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_projectBActionPerformed
@@ -450,8 +450,7 @@ public final class adminHome extends javax.swing.JFrame {
     }//GEN-LAST:event_loginPageB1MouseClicked
 
     private void loginPageB1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginPageB1ActionPerformed
-        login newpage = new login();
-        newpage.setVisible(true);
+        new Login().setVisible(true);
         this.dispose();
     }//GEN-LAST:event_loginPageB1ActionPerformed
 
@@ -472,7 +471,9 @@ public final class adminHome extends javax.swing.JFrame {
     }//GEN-LAST:event_exitBKeyPressed
 
     private void filterBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_filterBActionPerformed
-        filterTable();
+        if (filterBy1B.getSelectedIndex() != -1) {
+            filterTable();
+        }
     }//GEN-LAST:event_filterBActionPerformed
 
     public static void main(String args[]) {

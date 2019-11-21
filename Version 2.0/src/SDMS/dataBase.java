@@ -1,9 +1,6 @@
 package SDMS;
 
-import java.awt.HeadlessException;
 import java.sql.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
@@ -376,13 +373,13 @@ public class dataBase extends javax.swing.JFrame {
     }//GEN-LAST:event_updateSampleDataLMouseClicked
 
     private void loginPage2BActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginPage2BActionPerformed
-        login newpage = new login();
+        Login newpage = new Login();
         newpage.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_loginPage2BActionPerformed
 
     private void loginPageBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginPageBActionPerformed
-        login newpage = new login();
+        Login newpage = new Login();
         newpage.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_loginPageBActionPerformed

@@ -9,7 +9,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import javax.swing.JOptionPane;
 
-public class login extends javax.swing.JFrame {
+public class Login extends javax.swing.JFrame {
 
     public static final String JDBC_DRIVER = "org.h2.Driver";
     public static final String DB_URL = "jdbc:h2:~/SDMS";
@@ -19,7 +19,7 @@ public class login extends javax.swing.JFrame {
     private PreparedStatement pst;
     private String sql;
 
-    public login() {
+    public Login() {
         initComponents();
         hintB.setToolTipText("Username and Password : Admission Number");
     }
@@ -306,10 +306,10 @@ public class login extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(login.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Login.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         java.awt.EventQueue.invokeLater(() -> {
-            new login().setVisible(true);
+            new Login().setVisible(true);
         });
     }
 

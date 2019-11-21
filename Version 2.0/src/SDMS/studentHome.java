@@ -639,7 +639,7 @@ public class studentHome extends javax.swing.JFrame {
     }//GEN-LAST:event_loginPageBMouseClicked
 
     private void loginPageBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginPageBActionPerformed
-        login newpage = new login();
+        Login newpage = new Login();
         newpage.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_loginPageBActionPerformed
