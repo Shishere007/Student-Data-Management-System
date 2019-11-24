@@ -390,10 +390,17 @@ public class editStudent extends javax.swing.JFrame {
             pst = con.prepareStatement(sql);
             pst.setString(1, adno);
             pst.executeUpdate();
-            con.close();
             JOptionPane.showMessageDialog(this, "Deletion Successful");
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(this, e);
+        } finally {
+            try {
+                if (con != null) {
+                    con.close();
+                }
+
+            } catch (SQLException e) {
+            }
         }
 
     }
@@ -430,9 +437,16 @@ public class editStudent extends javax.swing.JFrame {
                 mailTF.setText(rs.getString(8));
                 phoneTF.setText(rs.getString(9));
             }
-            con.close();
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(this, e);
+        } finally {
+            try {
+                if (con != null) {
+                    con.close();
+                }
+
+            } catch (SQLException e) {
+            }
         }
     }
 
@@ -494,10 +508,17 @@ public class editStudent extends javax.swing.JFrame {
                     pst.setString(2, adno);
                     pst.executeUpdate();
                     JOptionPane.showMessageDialog(this, "Updation Success");
-                    con.close();
 
                 } catch (HeadlessException | SQLException e) {
                     JOptionPane.showMessageDialog(this, e);
+                } finally {
+                    try {
+                        if (con != null) {
+                            con.close();
+                        }
+
+                    } catch (SQLException e) {
+                    }
                 }
             }
         } catch (HeadlessException | NumberFormatException e) {
@@ -515,10 +536,17 @@ public class editStudent extends javax.swing.JFrame {
             while (rs.next()) {
                 deptCB.addItem(rs.getString(1));
             }
-            con.close();
             deptCB.setSelectedIndex(-1);
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(this, e);
+        } finally {
+            try {
+                if (con != null) {
+                    con.close();
+                }
+
+            } catch (SQLException e) {
+            }
         }
         for (int loopVar = 1; loopVar < 9; loopVar += 1) {
             semCB.addItem(String.valueOf(loopVar));

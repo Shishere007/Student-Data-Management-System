@@ -15,9 +15,9 @@ public class Login extends javax.swing.JFrame {
     public static final String DB_URL = "jdbc:h2:~/SDMS";
     public static final String DB_USERNAME = "root";
     public static final String DB_PASSWORD = "";
-    private Connection con;
-    private PreparedStatement pst;
-    private String sql;
+    public static Connection con = null;
+    public static String sql = null;
+    public static PreparedStatement pst = null;
 
     public Login() {
         initComponents();
@@ -351,9 +351,16 @@ public class Login extends javax.swing.JFrame {
                 } else {
                     JOptionPane.showMessageDialog(this, "Incorrect Username", "Error", JOptionPane.OK_OPTION);
                 }
-                con.close();
             } catch (HeadlessException | SQLException e) {
                 JOptionPane.showMessageDialog(this, "DB not updated'");
+            } finally {
+                try {
+                    if (con != null) {
+                        con.close();
+                    }
+                } catch (SQLException e) {
+
+                }
             }
 
         }

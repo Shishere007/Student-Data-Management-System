@@ -558,9 +558,16 @@ public final class adminHome extends javax.swing.JFrame {
                     while (rs.next()) {
                         filterBy2B.addItem(rs.getString(1));
                     }
-                    con.close();
                 } catch (SQLException e) {
                     JOptionPane.showMessageDialog(this, e);
+                } finally {
+                    try {
+                        if (con != null) {
+                            con.close();
+                        }
+
+                    } catch (SQLException e) {
+                    }
                 }
                 for (int loopVar = 1; loopVar < 9; loopVar += 1) {
                     filterBy3B.addItem(String.valueOf(loopVar));
@@ -636,9 +643,16 @@ public final class adminHome extends javax.swing.JFrame {
                 default:
                     break;
             }
-            con.close();
         } catch (SQLException ex) {
             //JOptionPane.showMessageDialog(this, ex);
+        } finally {
+            try {
+                if (con != null) {
+                    con.close();
+                }
+
+            } catch (SQLException e) {
+            }
         }
 
     }
@@ -656,9 +670,16 @@ public final class adminHome extends javax.swing.JFrame {
                 model.addRow(new Object[]{rs.getString(1), rs.getString(3), rs.getString(4),
                     rs.getString(5), rs.getString(6), rs.getString(7)});
             }
-            con.close();
         } catch (SQLException e) {
             //JOptionPane.showMessageDialog(this, e);
+        } finally {
+            try {
+                if (con != null) {
+                    con.close();
+                }
+
+            } catch (SQLException e) {
+            }
         }
 
     }

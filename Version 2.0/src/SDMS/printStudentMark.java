@@ -11,9 +11,9 @@ public class printStudentMark extends javax.swing.JFrame {
     public static final String DB_URL = "jdbc:h2:~/SDMS";
     public static final String DB_USERNAME = "root";
     public static final String DB_PASSWORD = "";
-    private Connection con;
-    private PreparedStatement pst;
-    private String sql;
+    private Connection con = null;
+    private PreparedStatement pst = null;
+    private String sql = null;
     private String adno;
     private String sem;
 
@@ -160,6 +160,14 @@ public class printStudentMark extends javax.swing.JFrame {
             }
         } catch (SQLException ex) {
             Logger.getLogger(printStudentMark.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                if (con != null) {
+                    con.close();
+                }
+
+            } catch (SQLException e) {
+            }
         }
 
     }

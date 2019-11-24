@@ -11,6 +11,9 @@ public class changePassword extends javax.swing.JFrame {
     public static final String DB_URL = "jdbc:h2:~/SDMS";
     public static final String DB_USERNAME = "root";
     public static final String DB_PASSWORD = "";
+    public static Connection con = null;
+    public static String sql = null;
+    public static PreparedStatement pst = null;
 
     public changePassword() {
         initComponents();
@@ -287,9 +290,9 @@ public class changePassword extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Password doesn't match", "Error(New Password)", JOptionPane.OK_OPTION);
         } else {
             try {
-                Connection con = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD);
-                String sql = "select * from user where username=?";
-                PreparedStatement pst = con.prepareStatement(sql);
+                con = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD);
+                sql = "select * from user where username=?";
+                pst = con.prepareStatement(sql);
                 pst.setString(1, username);
                 ResultSet rs = pst.executeQuery();
                 if (rs.next()) {
@@ -307,6 +310,14 @@ public class changePassword extends javax.swing.JFrame {
                 }
             } catch (HeadlessException | SQLException e) {
                 JOptionPane.showMessageDialog(this, e);
+            } finally {
+                try {
+                    if (con != null) {
+                        con.close();
+                    }
+
+                } catch (SQLException e) {
+                }
             }
         }
     }

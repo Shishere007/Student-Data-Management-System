@@ -11,6 +11,9 @@ public class addStudent extends javax.swing.JFrame {
     public static final String DB_URL = "jdbc:h2:~/SDMS";
     public static final String DB_USERNAME = "root";
     public static final String DB_PASSWORD = "";
+    public static Connection con = null;
+    public static String sql = null;
+    public static PreparedStatement pst = null;
 
     public addStudent() {
         initComponents();
@@ -445,9 +448,9 @@ public class addStudent extends javax.swing.JFrame {
                 errorPhone.setText("Invalid");
             } else {
                 try {
-                    Connection con = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD);
-                    String sql = "select name from student where adno=?";
-                    PreparedStatement pst = con.prepareStatement(sql);
+                    con = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD);
+                    sql = "select name from student where adno=?";
+                    pst = con.prepareStatement(sql);
                     pst.setString(1, adnoTF.getText());
                     ResultSet rs = pst.executeQuery();
                     if (rs.next()) {
@@ -477,9 +480,17 @@ public class addStudent extends javax.swing.JFrame {
                         JOptionPane.showMessageDialog(this, "Submission Success");
                         clearfield();
                     }
-                    con.close();
+
                 } catch (HeadlessException | SQLException e) {
                     JOptionPane.showMessageDialog(this, e);
+                } finally {
+                    try {
+                        if (con != null) {
+                            con.close();
+                        }
+
+                    } catch (SQLException e) {
+                    }
                 }
             }
         } catch (HeadlessException | NumberFormatException e) {
@@ -513,17 +524,24 @@ public class addStudent extends javax.swing.JFrame {
     private void insertDeptandSem() {
         deptCB.removeAllItems();
         try {
-            Connection con = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD);
-            String sql = "select dept from course";
-            PreparedStatement pst = con.prepareStatement(sql);
+            con = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD);
+            sql = "select dept from course";
+            pst = con.prepareStatement(sql);
             ResultSet rs = pst.executeQuery();
             while (rs.next()) {
                 deptCB.addItem(rs.getString(1));
             }
-            con.close();
             deptCB.setSelectedIndex(-1);
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(this, e);
+        } finally {
+            try {
+                if (con != null) {
+                    con.close();
+                }
+
+            } catch (SQLException e) {
+            }
         }
         for (int loopVar = 1; loopVar < 9; loopVar += 1) {
             semCB.addItem(String.valueOf(loopVar));

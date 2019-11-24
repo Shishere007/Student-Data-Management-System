@@ -12,9 +12,9 @@ public class studentMarks extends javax.swing.JFrame {
     public static final String DB_URL = "jdbc:h2:~/SDMS";
     public static final String DB_USERNAME = "root";
     public static final String DB_PASSWORD = "";
-    private PreparedStatement pst;
-    private Connection con;
-    private String sql;
+    private PreparedStatement pst = null;
+    private Connection con = null;
+    private String sql = null;
     String adno;
 
     public studentMarks() {
@@ -379,11 +379,18 @@ public class studentMarks extends javax.swing.JFrame {
                 pst.setString(10, lab2TF.getText());
                 pst.setString(11, String.valueOf(CGPA()));
                 pst.executeUpdate();
-                con.close();
                 JOptionPane.showMessageDialog(this, "Success");
                 markSearch();
             } catch (SQLException | ClassNotFoundException e) {
                 JOptionPane.showMessageDialog(this, e);
+            } finally {
+                try {
+                    if (con != null) {
+                        con.close();
+                    }
+
+                } catch (SQLException e) {
+                }
             }
         }
     }
@@ -404,10 +411,17 @@ public class studentMarks extends javax.swing.JFrame {
                 }
                 break;
             }
-            con.close();
             semCB.setSelectedIndex(-1);
         } catch (HeadlessException | SQLException e) {
             JOptionPane.showMessageDialog(this, e);
+        } finally {
+            try {
+                if (con != null) {
+                    con.close();
+                }
+
+            } catch (SQLException e) {
+            }
         }
     }
 
@@ -421,9 +435,16 @@ public class studentMarks extends javax.swing.JFrame {
             while (rs.next()) {
                 nameTF.setText(rs.getString(1));
             }
-            con.close();
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(this, e);
+        } finally {
+            try {
+                if (con != null) {
+                    con.close();
+                }
+
+            } catch (SQLException e) {
+            }
         }
         insertSem();
     }
@@ -450,9 +471,16 @@ public class studentMarks extends javax.swing.JFrame {
                 cgpaTF.setText(rs.getString(11));
                 makeNonEditable();
             }
-            con.close();
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(this, e);
+        } finally {
+            try {
+                if (con != null) {
+                    con.close();
+                }
+
+            } catch (SQLException e) {
+            }
         }
     }
 

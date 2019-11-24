@@ -413,12 +413,19 @@ public class dataBase extends javax.swing.JFrame {
             pst.execute();
             pst = con.prepareStatement(Create_Table_Mark);
             pst.execute();
-            con.close();
             JOptionPane.showMessageDialog(this, "Tables created successfully");
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(this, ex);
+        } finally {
+            try {
+                if (con != null) {
+                    con.close();
+                }
+
+            } catch (SQLException e) {
+            }
         }
-        
+
     }
 
     private void updateBasicTableData() {
@@ -448,10 +455,17 @@ public class dataBase extends javax.swing.JFrame {
                     + "'" + "pass" + "')";
             pst = con.prepareStatement(adminData);
             pst.execute();
-            con.close();
             JOptionPane.showMessageDialog(this, "Basic Table Data Updated");
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(this, "Already Updated!!!");
+        } finally {
+            try {
+                if (con != null) {
+                    con.close();
+                }
+
+            } catch (SQLException e) {
+            }
         }
     }
 
@@ -470,10 +484,17 @@ public class dataBase extends javax.swing.JFrame {
             sql = "delete from course";
             pst = con.prepareStatement(sql);
             pst.execute();
-            con.close();
             JOptionPane.showMessageDialog(this, "Tables data deleted successfully");
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(this, "Tables contains no data");
+        } finally {
+            try {
+                if (con != null) {
+                    con.close();
+                }
+
+            } catch (SQLException e) {
+            }
         }
     }
 
@@ -495,11 +516,17 @@ public class dataBase extends javax.swing.JFrame {
             sql = "drop table if exists mark";
             pst = con.prepareStatement(sql);
             pst.execute();
-            con.close();
             JOptionPane.showMessageDialog(this, "Tables deleted successfully");
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(this, "Tables doesn't exist!");
+        } finally {
+            try {
+                if (con != null) {
+                    con.close();
+                }
 
+            } catch (SQLException e) {
+            }
         }
     }
 
@@ -547,9 +574,16 @@ public class dataBase extends javax.swing.JFrame {
                 model.addRow(new Object[]{rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4),
                     rs.getString(5), rs.getString(6), rs.getString(7), rs.getString(8), rs.getString(9), rs.getString(10), rs.getString(11)});
             }
-            con.close();
         } catch (SQLException ex) {
             //Logger.getLogger(dataBase.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                if (con != null) {
+                    con.close();
+                }
+
+            } catch (SQLException e) {
+            }
         }
     }
 
@@ -570,9 +604,16 @@ public class dataBase extends javax.swing.JFrame {
             while (rs.next()) {
                 model.addRow(new Object[]{rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5)});
             }
-            con.close();
         } catch (SQLException ex) {
             // Logger.getLogger(dataBase.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                if (con != null) {
+                    con.close();
+                }
+
+            } catch (SQLException e) {
+            }
         }
     }
 
@@ -590,9 +631,16 @@ public class dataBase extends javax.swing.JFrame {
             while (rs.next()) {
                 model.addRow(new Object[]{rs.getString(1), rs.getString(2)});
             }
-            con.close();
         } catch (SQLException ex) {
             //Logger.getLogger(dataBase.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                if (con != null) {
+                    con.close();
+                }
+
+            } catch (SQLException e) {
+            }
         }
     }
 
@@ -618,9 +666,17 @@ public class dataBase extends javax.swing.JFrame {
                 model.addRow(new Object[]{rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4),
                     rs.getString(5), rs.getString(6), rs.getString(7), rs.getString(8), rs.getString(9)});
             }
-            con.close();
+
         } catch (SQLException ex) {
             //Logger.getLogger(dataBase.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                if (con != null) {
+                    con.close();
+                }
+
+            } catch (SQLException e) {
+            }
         }
     }
 

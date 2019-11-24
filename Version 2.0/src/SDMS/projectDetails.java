@@ -17,6 +17,9 @@ public class projectDetails extends javax.swing.JFrame {
     public static final String DB_URL = "jdbc:h2:~/SDMS";
     public static final String DB_USERNAME = "root";
     public static final String DB_PASSWORD = "";
+    private Connection con = null;
+    private PreparedStatement pst = null;
+    private String sql = null;
 
     public projectDetails() {
         initComponents();
@@ -267,16 +270,23 @@ public class projectDetails extends javax.swing.JFrame {
         DefaultTableModel projectList = (DefaultTableModel) projectListT.getModel();
         projectList.setRowCount(0);
         try {
-            Connection con = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD);
-            String sql = "select * from project";
-            PreparedStatement pst = con.prepareStatement(sql);
+            con = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD);
+            sql = "select * from project";
+            pst = con.prepareStatement(sql);
             ResultSet rs = pst.executeQuery();
             while (rs.next()) {
                 projectList.addRow(new Object[]{rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5)});
             }
-            con.close();
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(this, e);
+        } finally {
+            try {
+                if (con != null) {
+                    con.close();
+                }
+
+            } catch (SQLException e) {
+            }
         }
     }
 
@@ -300,15 +310,22 @@ public class projectDetails extends javax.swing.JFrame {
         } else {
 
             try {
-                Connection con = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD);
-                String sql = "update project set approved = 'Yes' where adno=?";
-                PreparedStatement pst = con.prepareStatement(sql);
+                con = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD);
+                sql = "update project set approved = 'Yes' where adno=?";
+                pst = con.prepareStatement(sql);
                 pst.setString(1, adnoTF.getText());
                 pst.executeUpdate();
                 JOptionPane.showMessageDialog(this, "Update Success");
-                con.close();
             } catch (HeadlessException | SQLException e) {
                 JOptionPane.showMessageDialog(this, e);
+            } finally {
+                try {
+                    if (con != null) {
+                        con.close();
+                    }
+
+                } catch (SQLException e) {
+                }
             }
         }
         updateTable();
@@ -320,15 +337,22 @@ public class projectDetails extends javax.swing.JFrame {
         } else {
 
             try {
-                Connection con = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD);
-                String sql = "update project set approved = 'RJT' where adno=?";
-                PreparedStatement pst = con.prepareStatement(sql);
+                con = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD);
+                sql = "update project set approved = 'RJT' where adno=?";
+                pst = con.prepareStatement(sql);
                 pst.setString(1, adnoTF.getText());
                 pst.executeUpdate();
                 JOptionPane.showMessageDialog(this, "Update Success");
-                con.close();
             } catch (HeadlessException | SQLException e) {
                 JOptionPane.showMessageDialog(this, e);
+            } finally {
+                try {
+                    if (con != null) {
+                        con.close();
+                    }
+
+                } catch (SQLException e) {
+                }
             }
         }
         updateTable();
